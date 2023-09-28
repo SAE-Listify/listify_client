@@ -67,7 +67,8 @@ class Tab(QWidget):
         self.tabs.append(
             {
                 "widget": QWidget(),
-                "label_test": QLabel(),
+                "label_test": QLabel("placeholder"),
+                "button_test": QPushButton("placeholder"),
             }
         )
 
@@ -78,9 +79,20 @@ class Tab(QWidget):
         # CREATING LAYOUTS
         current_tab["widget"].layout = QGridLayout()
 
+        # SETTING LAYOUTS TODO is using .layout necessary??
+        current_tab["widget"].setLayout(current_tab["widget"].layout)
+
+        # CREATING WIDGETS
         # row: int, column: int, rowSpan: int, columnSpan: int
         ### TESTING
-        current_tab["widget"].layout.addWidget(current_tab["label_test"], 0, 0)
+        current_tab["widget"].layout.addWidget(current_tab["label_test"], 0, 0, 1, 1)
+        current_tab["widget"].layout.addWidget(current_tab["button_test"], 1, 0, 1, 1)
+
+
+
+        # SETTING
+        current_tab["label_test"].setText(f"Test {len(self.tabs)}")
+
 
     """
     Executed when a tab is closed by the user, takes the index as its argument
