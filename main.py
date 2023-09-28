@@ -1,17 +1,99 @@
-# This is a sample Python script.
+import logging
+import sys
 
-# Press Shift+F10 to execute it or replace it with your code.
-# Press Double Shift to search everywhere for classes, files, tool windows, actions, and settings.
+from PyQt5.QtWidgets import (
+    QApplication,
+    QMainWindow,
+    QWidget,
+    QGridLayout,
+    QLabel,
+    QLineEdit,
+    QPushButton,
+    QComboBox,
+    QMessageBox,
+    QTabWidget,
+    QTextBrowser,
+    QHBoxLayout,
+    QMessageBox,
+)
+from PyQt5.QtCore import QCoreApplication
+from PyQt5.QtGui import QFont, QCloseEvent
 
 
-def print_hi(name):
-    # Use a breakpoint in the code line below to debug your script.
-    print(f'Hi, {name}')  # Press Ctrl+8 to toggle the breakpoint.
+DEBUG = True
+
+if DEBUG:
+    logging.basicConfig(level=logging.DEBUG)
+else:
+    logging.basicConfig(level=logging.WARNING)
 
 
-# Press the green button in the gutter to run the script.
+class MainWindow(QMainWindow):
+    def __init__(self) -> None:
+        super().__init__()
+        self.setWindowTitle("Listify")
+        self.setMinimumSize(1000, 500)
+        self.tab = Tab(self)
+        self.setCentralWidget(self.tab)
+        self.show()
+
+    def closeEvent(self, _e: QCloseEvent):
+        QCoreApplication.exit(0)
+
+
+class Tab(QWidget):
+    def __init__(self, parent: MainWindow):
+        super(QWidget, self).__init__()
+        self.parent = parent
+        self.layout = QGridLayout(self)
+        self.setLayout(self.layout)
+
+        # Create Tab Widget
+        self.tabWidget = QTabWidget()
+
+        self.tabWidget.setTabsClosable(True)
+        self.tabWidget.setMovable(True)
+        self.tabWidget.tabCloseRequested.connect(self.__closeTab)
+
+        self.tabs = []
+
+        self.layout.addWidget(self.tabWidget)
+
+        # Open test tab
+        self.__openTab("Projet Test")
+        self.__openTab("Projet Test2")
+
+    def __openTab(self, name: str):
+        self.tabs.append(
+            {
+                "widget": QWidget(),
+                "label_test": QLabel(),
+            }
+        )
+
+        current_tab = self.tabs[-1]
+
+        self.tabWidget.addTab(current_tab["widget"], name)
+
+        # CREATING LAYOUTS
+        current_tab["widget"].layout = QGridLayout()
+
+        # row: int, column: int, rowSpan: int, columnSpan: int
+        ### TESTING
+        current_tab["widget"].layout.addWidget(current_tab["label_test"], 0, 0)
+
+    """
+    Executed when a tab is closed by the user, takes the index as its argument
+    """
+    def __closeTab(self, index: int):
+        logging.info(f"Closing Tab index {index}")
+
+        self.tabs.pop(index)
+        self.tabWidget.removeTab(index)
+
+
 if __name__ == '__main__':
-    print_hi('PyCharm')
-    print("hi everyone")
-
-# See PyCharm help at https://www.jetbrains.com/help/pycharm/
+    app = QApplication(sys.argv)
+    window = MainWindow()
+    window.show()
+    app.exec()
