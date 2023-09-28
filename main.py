@@ -104,15 +104,18 @@ class Tab(QWidget):
         self.tabs.pop(index)
         self.tabWidget.removeTab(index)
 
-class sidebar(QWidget):
-    def __init__(self, parent: MainWindow):
-        super(QWidget, self).__init__()
-        self.parent = parent
-        self.layout = QGridLayout(self)
-        self.setLayout(self.layout)
-        self.layout.addWidget(QLabel("test"))
+    class main_bg(QGridLayout)
+        def __init__(self):
+            super().__init__()
+            self.main_bg = QWidget()
+            self.main_bg.setLayout(self.main_bg)
+            self.main_bg.layout = QGridLayout()
+            self.main_bg.setLayout(self.main_bg.layout)
+            self.main_bg.layout.addWidget(self.main_bg, 0, 0, 1, 1)
+            self.main_bg.layout.addWidget(self.side_panel, 0, 1, 1, 1)
+            self.main_bg.layout.addWidget(self.button_createProject, 0, 2, 1, 1)
+            self.main_bg.layout.addWidget(self.button_display, 0, 3, 1, 1)
 
-class project(QWidget):
 
 
 if __name__ == '__main__':
