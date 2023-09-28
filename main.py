@@ -7,3 +7,4 @@ widget.resize(400, 200)
 widget.setWindowTitle("Litstify")
 widget.show()
 exit(app.exec_())
+comitted
