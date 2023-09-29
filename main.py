@@ -125,7 +125,7 @@ class Tab(QWidget):
             self.layout.addWidget(self.button_createProject, 0, 1)
             self.layout.addWidget(self.button_display, 1, 1)
             self.layout.addWidget(self.button_delete, 2, 1)
-
+            #stretching
             self.layout.setColumnStretch(2, 1)
 
 if __name__ == '__main__':
