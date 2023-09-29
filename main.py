@@ -18,8 +18,7 @@ from PyQt5.QtWidgets import (
 )
 from PyQt5.QtCore import QCoreApplication
 from PyQt5.QtGui import QFont, QCloseEvent
-
-
+x
 DEBUG = True
 
 if DEBUG:
@@ -28,7 +27,7 @@ else:
     logging.basicConfig(level=logging.WARNING)
 
 
-# mainwindow class open tab named listify and size of window is 1000x500
+# mainwindow class ouvre une tab de 1000x500 nommée Listify
 class MainWindow(QMainWindow):
     def __init__(self) -> None:
         super().__init__()
@@ -41,7 +40,7 @@ class MainWindow(QMainWindow):
     def closeEvent(self, _e: QCloseEvent):
         QCoreApplication.exit(0)
 
-#Tab class is the tab widget that holds all the tabs
+#Tab class est la tab ouverte par mainwindow
 class Tab(QWidget):
     def __init__(self, parent: MainWindow):
         super(QWidget, self).__init__()
@@ -75,6 +74,8 @@ class Tab(QWidget):
 
         current_tab = self.tabs[-1]
 
+        # ADDING TAB TO TAB WIDGET
+
         self.tabWidget.addTab(current_tab["widget"], name)
 
         # CREATING LAYOUTS
@@ -104,6 +105,7 @@ class Tab(QWidget):
         self.tabs.pop(index)
         self.tabWidget.removeTab(index)
 
+    # main_bg class est le background de la tab de la sidebar
     class main_bg(QGridLayout)
         def __init__(self):
             super().__init__()
