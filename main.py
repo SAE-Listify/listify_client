@@ -112,22 +112,21 @@ class Tab(QWidget):
         def __init__(self):
             super().__init__()
 
-            # Create layout
             self.layout = QGridLayout()
             self.setLayout(self.layout)
 
-            # Create widgets
-            self.side_panel = QLabel("Side Panel")  # Placeholder
+            self.side_panel = QLabel("Side Panel")
             self.button_createProject = QPushButton("Create Project")
             self.button_display = QPushButton("Display")
             self.button_delete = QPushButton("Delete")
 
-            # Add widgets to layout
-            self.layout.addWidget(self.side_panel, 0, 0)
-            self.layout.addWidget(self.button_createProject, 0, 1)
-            self.layout.addWidget(self.button_display, 0, 2)
-            self.layout.addWidget(self.button_delete, 0, 3)
+            self.layout.addWidget(self.side_panel, 0, 0, 4, 1)
 
+            self.layout.addWidget(self.button_createProject, 0, 1)
+            self.layout.addWidget(self.button_display, 1, 1)
+            self.layout.addWidget(self.button_delete, 2, 1)
+
+            self.layout.setColumnStretch(2, 1)
 
 if __name__ == '__main__':
     app = QApplication(sys.argv)
