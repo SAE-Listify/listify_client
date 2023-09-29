@@ -36,7 +36,6 @@ class MainWindow(QMainWindow):
         self.tab = Tab(self)
         self.setCentralWidget(self.tab)
         self.show()
-
     def closeEvent(self, _e: QCloseEvent):
         QCoreApplication.exit(0)
 
@@ -47,6 +46,9 @@ class Tab(QWidget):
         self.parent = parent
         self.layout = QGridLayout(self)
         self.setLayout(self.layout)
+
+        self.mainBackground = Tab.main_bg()
+        self.layout.addWidget(self.mainBackground)
 
         # Create Tab Widget
         self.tabWidget = QTabWidget()
@@ -106,18 +108,25 @@ class Tab(QWidget):
         self.tabWidget.removeTab(index)
 
     # main_bg class est le background de la tab de la sidebar
-    class main_bg(QGridLayout):
+    class main_bg(QWidget):
         def __init__(self):
             super().__init__()
-            self.main_bg = QWidget()
-            self.main_bg.setLayout(self.main_bg)
-            self.main_bg.layout = QGridLayout()
-            self.main_bg.setLayout(self.main_bg.layout)
-            self.main_bg.layout.addWidget(self.main_bg, 0, 0, 1, 1)
-            self.main_bg.layout.addWidget(self.side_panel, 0, 1, 1, 1)
-            self.main_bg.layout.addWidget(self.button_createProject, 0, 2, 1, 1)
-            self.main_bg.layout.addWidget(self.button_display, 0, 3, 1, 1)
 
+            # Create layout
+            self.layout = QGridLayout()
+            self.setLayout(self.layout)
+
+            # Create widgets
+            self.side_panel = QLabel("Side Panel")  # Placeholder
+            self.button_createProject = QPushButton("Create Project")
+            self.button_display = QPushButton("Display")
+            self.button_delete = QPushButton("Delete")
+
+            # Add widgets to layout
+            self.layout.addWidget(self.side_panel, 0, 0)
+            self.layout.addWidget(self.button_createProject, 0, 1)
+            self.layout.addWidget(self.button_display, 0, 2)
+            self.layout.addWidget(self.button_delete, 0, 3)
 
 
 if __name__ == '__main__':
