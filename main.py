@@ -18,7 +18,7 @@ from PyQt5.QtWidgets import (
 )
 from PyQt5.QtCore import QCoreApplication
 from PyQt5.QtGui import QFont, QCloseEvent
-x
+
 DEBUG = True
 
 if DEBUG:
@@ -106,7 +106,7 @@ class Tab(QWidget):
         self.tabWidget.removeTab(index)
 
     # main_bg class est le background de la tab de la sidebar
-    class main_bg(QGridLayout)
+    class main_bg(QGridLayout):
         def __init__(self):
             super().__init__()
             self.main_bg = QWidget()
