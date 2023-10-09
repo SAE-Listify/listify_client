@@ -1,6 +1,7 @@
 import logging
 import sys
 import sidebar #importing the sidebar.py :)
+#Main.py is working, i'm gonna focus on the side bar now
 
 from PyQt5.QtWidgets import (
     QApplication, QMainWindow, QWidget, QGridLayout, QLabel, QLineEdit,
