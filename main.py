@@ -1,23 +1,14 @@
 import logging
 import sys
+import sidebar #importing the sidebar.py :)
 
 from PyQt5.QtWidgets import (
-    QApplication,
-    QMainWindow,
-    QWidget,
-    QGridLayout,
-    QLabel,
-    QLineEdit,
-    QPushButton,
-    QComboBox,
-    QMessageBox,
-    QTabWidget,
-    QTextBrowser,
-    QHBoxLayout,
-    QMessageBox,
+    QApplication, QMainWindow, QWidget, QGridLayout, QLabel, QLineEdit,
+    QPushButton, QComboBox, QMessageBox, QTabWidget, QTextBrowser,
+    QHBoxLayout, QVBoxLayout, QFrame, QListWidget, QStackedLayout, QTextEdit
 )
-from PyQt5.QtCore import QCoreApplication
-from PyQt5.QtGui import QFont, QCloseEvent
+from PyQt5.QtCore import QCoreApplication, Qt
+from PyQt5.QtGui import QFont, QCloseEvent, QPixmap, QIcon # Ensure QIcon is here
 
 DEBUG = True
 
@@ -25,111 +16,79 @@ if DEBUG:
     logging.basicConfig(level=logging.DEBUG)
 else:
     logging.basicConfig(level=logging.WARNING)
+class TaskListWidget(QWidget):
+    def __init__(self, parent=None):
+        super(TaskListWidget, self).__init__(parent)
 
+        self.layout = QVBoxLayout(self)
 
-# mainwindow class ouvre une tab de 1000x500 nommée Listify
-class MainWindow(QMainWindow):
-    def __init__(self) -> None:
+        # Task input field
+        self.taskInput = QTextEdit(self)
+        self.layout.addWidget(self.taskInput)
+
+        # Add task button
+        self.addTaskButton = QPushButton("Add Task", self)
+        self.addTaskButton.clicked.connect(self.add_task)
+        self.layout.addWidget(self.addTaskButton)
+
+        # List for tasks
+        self.taskList = QListWidget(self)
+        self.layout.addWidget(self.taskList)
+
+        # Delete task button
+        self.deleteTaskButton = QPushButton("Delete Task", self)
+        self.deleteTaskButton.clicked.connect(self.delete_task)
+        self.layout.addWidget(self.deleteTaskButton)
+
+    def add_task(self):
+        task = self.taskInput.toPlainText().strip()
+        if task:
+            self.taskList.addItem(task)
+            self.taskInput.clear()
+
+    def delete_task(self):
+        # Remove the currently selected task
+        current_item = self.taskList.currentItem()
+        if current_item:
+            row = self.taskList.row(current_item)
+            self.taskList.takeItem(row)
+
+class Listify(QMainWindow):
+    def __init__(self):
         super().__init__()
-        self.setWindowTitle("Listify")
-        self.setMinimumSize(1000, 500)
-        self.tab = Tab(self)
-        self.setCentralWidget(self.tab)
-        self.show()
-    def closeEvent(self, _e: QCloseEvent):
-        QCoreApplication.exit(0)
 
-#Tab class est la tab ouverte par mainwindow
-class Tab(QWidget):
-    def __init__(self, parent: MainWindow):
-        super(QWidget, self).__init__()
-        self.parent = parent
-        self.layout = QGridLayout(self)
-        self.setLayout(self.layout)
+        # Window properties
+        self.setWindowTitle("Listify - ToDo App")
+        self.setGeometry(100, 100, 800, 600)  # x, y, z, moment
 
-        self.mainBackground = Tab.main_bg()
-        self.layout.addWidget(self.mainBackground)
+        # Create main layout
+        main_layout = QHBoxLayout()
 
-        # Create Tab Widget
-        self.tabWidget = QTabWidget()
+        # Sidebar
+        self.sidebar = sidebar.Sidebar(self)
+        main_layout.addWidget(self.sidebar)
 
-        self.tabWidget.setTabsClosable(True)
-        self.tabWidget.setMovable(True)
-        self.tabWidget.tabCloseRequested.connect(self.__closeTab)
+        # Content frame
+        self.contentFrame = QFrame(self)
+        self.contentFrame.setFrameShape(QFrame.StyledPanel)
+        main_layout.addWidget(self.contentFrame)
 
-        self.tabs = []
+        # Placeholder
+        self.contentLayout = QStackedLayout(self.contentFrame)
 
-        self.layout.addWidget(self.tabWidget)
+        # Create the TaskListWidget
+        self.taskListWidget = TaskListWidget(self.contentFrame)
+        self.contentLayout.addWidget(self.taskListWidget)
+        self.contentLayout.setCurrentWidget(self.taskListWidget)
 
-        # Open test tab
-        self.__openTab("Projet Test")
-        self.__openTab("Projet Test2")
-
-    def __openTab(self, name: str):
-        self.tabs.append(
-            {
-                "widget": QWidget(),
-                "label_test": QLabel("placeholder"),
-                "button_test": QPushButton("placeholder"),
-            }
-        )
-
-        current_tab = self.tabs[-1]
-
-        # ADDING TAB TO TAB WIDGET
-
-        self.tabWidget.addTab(current_tab["widget"], name)
-
-        # CREATING LAYOUTS
-        current_tab["widget"].layout = QGridLayout()
-
-        # SETTING LAYOUTS TODO is using .layout necessary??
-        current_tab["widget"].setLayout(current_tab["widget"].layout)
-
-        # CREATING WIDGETS
-        # row: int, column: int, rowSpan: int, columnSpan: int
-        ### TESTING
-        current_tab["widget"].layout.addWidget(current_tab["label_test"], 0, 0, 1, 1)
-        current_tab["widget"].layout.addWidget(current_tab["button_test"], 1, 0, 1, 1)
+        # Set the main layout
+        central_widget = QWidget()
+        central_widget.setLayout(main_layout)
+        self.setCentralWidget(central_widget)
 
 
-
-        # SETTING
-        current_tab["label_test"].setText(f"Test {len(self.tabs)}")
-
-
-    """
-    Executed when a tab is closed by the user, takes the index as its argument
-    """
-    def __closeTab(self, index: int):
-        logging.info(f"Closing Tab index {index}")
-
-        self.tabs.pop(index)
-        self.tabWidget.removeTab(index)
-
-    # main_bg class est le background de la tab de la sidebar
-    class main_bg(QWidget):
-        def __init__(self):
-            super().__init__()
-
-            self.layout = QGridLayout()
-            self.setLayout(self.layout)
-
-            self.side_panel = QLabel("Side Panel")
-            self.button_createProject = QPushButton("Create Project")
-            self.button_display = QPushButton("Display")
-            self.button_delete = QPushButton("Delete")
-
-            self.layout.addWidget(self.side_panel, 0, 0, 4, 1)
-
-            self.layout.addWidget(self.button_createProject, 0, 1)
-            self.layout.addWidget(self.button_display, 1, 1)
-            self.layout.addWidget(self.button_delete, 2, 1)
-            #stretching
-            self.layout.setColumnStretch(2, 1)
-
-if __name__ == '__main__':
-    app = QApplication(sys.argv)
-    window = MainWindow()
+if __name__ == "__main__":
+    app = QApplication([])
+    window = Listify()
     window.show()
-    app.exec()
+    app.exec_()
