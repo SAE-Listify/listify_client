@@ -36,8 +36,8 @@ class Project(QWidget):
         index = len(self.__repository_list)  # take the index of the new place
         self.__repository_list[index - 1] = repo.Repository(f"{name_repository}")  # create the object in the list
 
-    def delete_repository(self, name_repository):
-        self.__repository_list.remove(self.__repository_list.index(name_repository.__name_repository))
+    def delete_repository(self, num: int):
+        del self.__repository_list[num]
 
     def changename_proj(self, new_name): #change the name
         self.__name_project = new_name
