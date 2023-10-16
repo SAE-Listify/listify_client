@@ -1,5 +1,18 @@
-import subtask as sbts
-
+from PyQt5.QtWidgets import (
+    QApplication,
+    QMainWindow,
+    QWidget,
+    QGridLayout,
+    QLabel,
+    QLineEdit,
+    QPushButton,
+    QComboBox,
+    QMessageBox,
+    QTabWidget,
+    QTextBrowser,
+    QHBoxLayout,
+    QMessageBox,
+)
 class Subtask:
 
     def _init__(self, name_subtask : str = 'Sous-Tâche', subtask_list : list = None): #variable init
@@ -12,6 +25,13 @@ class Subtask:
     def __str__(self): #str to print the tittle in the project
         return f"{self.__name_subtask}"
 
-    def create_subtask(self, name_subtask : str): #create a subtask using the subtask file
-        name_subtask = sbts.subtask(f"{name_subtask}")
-        self.__subtask_list.append(name_subtask) #add the subtask to the list
+    def changename_task(self, new_name):
+        self.__name_task = new_name
+
+    @property
+    def name_task(self):
+        return self.__name_task
+
+    @name_task.setter
+    def name_task(self, name_task):
+        self.__name_task = name_task
