@@ -19,6 +19,8 @@ from PyQt5.QtWidgets import (
 from PyQt5.QtCore import QCoreApplication
 from PyQt5.QtGui import QFont, QCloseEvent
 
+import ui_objects
+
 
 DEBUG = True
 
@@ -33,23 +35,24 @@ class MainWindow(QMainWindow):
         super().__init__()
         self.setWindowTitle("Listify")
         self.setMinimumSize(1000, 500)
-        self.tab = Tab(self)
-        self.setCentralWidget(self.tab)
+        self.mainWidget = Listify(self)
+        self.setCentralWidget(self.mainWidget)
         self.show()
 
     def closeEvent(self, _e: QCloseEvent):
         QCoreApplication.exit(0)
 
 
-class Tab(QWidget):
+class Listify(QWidget):
     def __init__(self, parent: MainWindow):
         super(QWidget, self).__init__()
         self.parent = parent
         self.layout = QGridLayout(self)
         self.setLayout(self.layout)
 
-        # Create Tab Widget
+        # Create Main Listify Widgets Here
         self.tabWidget = QTabWidget()
+        self.sidebarWidget = ui_objects.Sidebar(parent=self)
 
         self.tabWidget.setTabsClosable(True)
         self.tabWidget.setMovable(True)
@@ -57,7 +60,10 @@ class Tab(QWidget):
 
         self.tabs = []
 
-        self.layout.addWidget(self.tabWidget)
+        # Add widgets to the main Listify Widget here
+        # row: int, column: int, rowSpan: int, columnSpan: int
+        self.layout.addWidget(self.sidebarWidget, 0, 0)
+        self.layout.addWidget(self.tabWidget, 0, 1)
 
         # Open test tab
         self.__openTab("Projet Test")
@@ -77,16 +83,16 @@ class Tab(QWidget):
         self.tabWidget.addTab(current_tab["widget"], name)
 
         # CREATING LAYOUTS
-        current_tab["widget"].layout = QGridLayout()
+        current_tab["widget"].__layout = QGridLayout()
 
         # SETTING LAYOUTS TODO is using .layout necessary??
-        current_tab["widget"].setLayout(current_tab["widget"].layout)
+        current_tab["widget"].setLayout(current_tab["widget"].__layout)
 
         # CREATING WIDGETS
         # row: int, column: int, rowSpan: int, columnSpan: int
         ### TESTING
-        current_tab["widget"].layout.addWidget(current_tab["label_test"], 0, 0, 1, 1)
-        current_tab["widget"].layout.addWidget(current_tab["button_test"], 1, 0, 1, 1)
+        current_tab["widget"].__layout.addWidget(current_tab["label_test"], 0, 0, 1, 1)
+        current_tab["widget"].__layout.addWidget(current_tab["button_test"], 1, 0, 1, 1)
 
 
 
@@ -102,6 +108,21 @@ class Tab(QWidget):
 
         self.tabs.pop(index)
         self.tabWidget.removeTab(index)
+
+
+    """
+    Create a new project
+    """
+    def new_project(self, name):
+        pass
+
+    """
+    Get projects list for sidebar
+    """
+    @property
+    def projects(self):
+        pass
+
 
 
 if __name__ == '__main__':

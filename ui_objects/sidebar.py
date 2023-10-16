@@ -2,52 +2,42 @@ from PyQt5.QtWidgets import QWidget, QVBoxLayout, QLabel, QPushButton
 from PyQt5.QtGui import QPixmap
 from PyQt5.QtCore import Qt
 
-class Sidebar(QWidget):
-    def __init__(self, parent=None):
-        super(Sidebar, self).__init__(parent)
 
-        self.setFrameShape(QFrame.StyledPanel)
+class Sidebar(QWidget):
+    def __init__(self, parent: QWidget = None):
+        self.parent = parent
+        super(Sidebar, self).__init__(self.parent)
+
         self.setFixedWidth(150)  # Width of the sidebar
 
-        self.layout = QVBoxLayout(self)
-        self.setup_icons()
-        self.setup_projects()
+        self.__layout = QVBoxLayout(self)
 
-    def setup_icons(self):
-        icons = ['path_to_icon1', 'path_to_icon2', 'path_to_icon3', 'path_to_icon4']
+        # init a list of buttons for project, we will add
+        self.__projects_buttons = []
 
-        for icon_path in icons:
-            icon_label = QLabel(self)
-            pixmap = QPixmap(icon_path)
-            icon_label.setPixmap(pixmap)
-            icon_label.setAlignment(Qt.AlignCenter)
-            self.layout.addWidget(icon_label)
+        self.__setup_projects()
 
-        self.layout.addStretch()
-
-    def setup_projects(self):
+    def __setup_projects(self):
         # Create button
         create_button = QPushButton("Create", self)
-        create_button.clicked.connect(self.create_project)  # Connect to a method to handle project creation
-        self.layout.addWidget(create_button)
+        create_button.clicked.connect(self.__create_project)  # Connect to a method to handle project creation
+        self.__layout.addWidget(create_button)
 
-        # Project buttons
-        project1_button = QPushButton("Project1", self)
-        project1_button.clicked.connect(self.open_project1)
-        self.layout.addWidget(project1_button)
+        ## something that could maybe work:
+        # for index, project in zip(self.parent.projects):
+        #     # Project buttons
+        #     self.__projects_buttons.append(QPushButton(project.name_project))
+        #
+        #     self.__projects_buttons[-1].clicked.connect(
+        #         lambda: self.__open_project(index)
+        #     )
+        #
+        #     self.layout.addWidget(self.__projects_buttons[-1])
 
-        project2_button = QPushButton("Project2", self)
-        project2_button.clicked.connect(self.open_project2)
-        self.layout.addWidget(project2_button)
-
-    def create_project(self):
+    def __create_project(self):
         # Logic to handle project creation
         pass
 
-    def open_project1(self):
-        # Logic to open Project1
-        pass
-
-    def open_project2(self):
-        # Logic to open Project2
+    def __open_project(self, index: int):
+        # Logic to open Project "index"
         pass
