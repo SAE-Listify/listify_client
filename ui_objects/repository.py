@@ -18,6 +18,7 @@ from PyQt5.QtWidgets import (
     QHBoxLayout,
     QMessageBox,
 )
+
 from PyQt5.QtCore import QCoreApplication
 from PyQt5.QtGui import QFont, QCloseEvent
 class Repository(QWidget):
@@ -38,3 +39,22 @@ class Repository(QWidget):
 
     def delete_task(self, name_task):
         self.__task_list.remove(self.__task_list.index(name_task.__name_task))
+
+    def change_name(self, new_name): #change the name
+        self.__name_rep = new_name
+
+    @property
+    def name_rep(self):
+        return self.__name_rep
+
+    @name_rep.setter
+    def name_rep(self, name_rep):
+        self.__name_rep = name_rep
+
+    @property
+    def task_list(self):
+        return self.__task_list
+
+    @task_list.setter
+    def task_list(self, task_list):
+        self.__task_list = task_list
