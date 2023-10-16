@@ -1,7 +1,4 @@
 # Client Listify 
-> Louis san 
-> >"I'm a client, I want to listify my life"
-> >"I want to listify my life"
-> >"make it more breathable"
-> >"make multiple .py files"
-> >"make it more breathable"
+> Créée dans le cadre de la SAE5.02.
+
+Client pour notre application de ToDo List.
