@@ -47,7 +47,7 @@ class Project(QWidget):
         return self.__name_project
 
     @name_project.setter
-    def name_rep(self, name_project):
+    def name_project(self, name_project):
         self.__name_project = name_project
 
     @property
@@ -55,5 +55,5 @@ class Project(QWidget):
         return self.__repository_list
 
     @repository_list.setter
-    def task_list(self, repository_list):
+    def repository_list(self, repository_list):
         self.__repository_list = repository_list
