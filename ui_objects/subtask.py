@@ -1,3 +1,4 @@
+
 from PyQt5.QtWidgets import (
     QApplication,
     QMainWindow,
@@ -13,25 +14,25 @@ from PyQt5.QtWidgets import (
     QHBoxLayout,
     QMessageBox,
 )
-class Subtask:
+class Subtask: #(QWidget):
 
-    def _init__(self, name_subtask : str = 'Sous-Tâche', subtask_list : list = None): #variable init
+    def __init__(self, name_subtask : str = 'Sous-Tâche', subtask_list : list = None): #variable init
+        # super(QWidget, self).__init__()
         if subtask_list is None: #creation of an empty list if none is given
             subtask_list = []
         self.__name_subtask = name_subtask
         self.__subtask_list = subtask_list
-        pass
 
     def __str__(self): #str to print the tittle in the project
         return f"{self.__name_subtask}"
 
-    def changename_task(self, new_name):
-        self.__name_task = new_name
+    def changename_subtask(self, new_name):
+        self.__name_subtask = new_name
 
     @property
-    def name_task(self):
-        return self.__name_task
+    def name_subtask(self):
+        return self.__name_subtask
 
-    @name_task.setter
-    def name_task(self, name_task):
-        self.__name_task = name_task
+    @name_subtask.setter
+    def name_subtask(self, name_subtask):
+        self.__name_subtask = name_subtask
