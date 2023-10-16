@@ -39,3 +39,21 @@ class Project(QWidget):
     def delete_repository(self, name_repository):
         self.__repository_list.remove(self.__repository_list.index(name_repository.__name_repository))
 
+    def change_name(self, new_name): #change the name
+        self.__name_project = new_name
+
+    @property
+    def name_project(self):
+        return self.__name_project
+
+    @name_project.setter
+    def name_rep(self, name_project):
+        self.__name_project = name_project
+
+    @property
+    def repository_list(self):
+        return self.__repository_list
+
+    @repository_list.setter
+    def task_list(self, repository_list):
+        self.__repository_list = repository_list
