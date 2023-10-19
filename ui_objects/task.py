@@ -1,4 +1,4 @@
-import subtask as sbts
+from . import subtask as sbts
 
 from PyQt5.QtWidgets import (
     QApplication,
