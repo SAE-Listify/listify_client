@@ -1,4 +1,4 @@
-import task as ts
+from . import task as ts
 
 from PyQt5.QtWidgets import (
     QApplication,

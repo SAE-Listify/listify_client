@@ -1,6 +1,4 @@
-
-import repository as repo
-
+from . import repository as repo
 import logging
 import sys
 
