@@ -1,4 +1,4 @@
-from PyQt5.QtWidgets import QWidget, QVBoxLayout, QLabel, QPushButton
+from PyQt5.QtWidgets import QWidget, QVBoxLayout, QLabel, QPushButton, QLineEdit
 from PyQt5.QtGui import QPixmap
 from PyQt5.QtCore import Qt
 
@@ -23,21 +23,33 @@ class Sidebar(QWidget):
         create_button.clicked.connect(self.__create_project)  # Connect to a method to handle project creation
         self.__layout.addWidget(create_button)
 
-        ## something that could maybe work:
-        # for index, project in zip(self.parent.projects):
-        #     # Project buttons
-        #     self.__projects_buttons.append(QPushButton(project.name_project))
-        #
-        #     self.__projects_buttons[-1].clicked.connect(
-        #         lambda: self.__open_project(index)
-        #     )
-        #
-        #     self.layout.addWidget(self.__projects_buttons[-1])
+        # Text box for project name
+        self.project_name_textbox = QLineEdit(self)
+        self.project_name_textbox.setPlaceholderText("Enter project name")
+        self.__layout.addWidget(self.project_name_textbox)
 
     def __create_project(self):
-        # Logic to handle project creation
+        project_name = self.project_name_textbox.text()
+
+        if not project_name:  # Check if the project name is not empty
+            QMessageBox.warning(self, "Warning", "Project name cannot be empty!")
+            return
+
+        project_button = QPushButton(project_name, self)
+        project_button.clicked.connect(self.__open_project)
+
+        self.__projects_buttons.append(project_button)
+        self.__layout.addWidget(project_button)
         pass
 
     def __open_project(self, index: int):
-        # Logic to open Project "index"
+        # Identify which button was clicked
+        clicked_button = self.sender()
+        index = self.__projects_buttons.index(clicked_button)
+        self.__switch_to_project_tab(index)
+        pass
+
+    def __switch_to_project_tab(self, index: int):
+        # Switch to the tab
+        self.parent.project_tab_widget.setCurrentIndex(index)
         pass
