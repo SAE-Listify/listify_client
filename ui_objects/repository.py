@@ -1,4 +1,4 @@
-from . import task as ts
+import task as ts
 
 from PyQt5.QtWidgets import (
     QApplication,
@@ -18,12 +18,15 @@ from PyQt5.QtWidgets import (
 
 
 class Repository:  # (QWidget):
-    def __init__(self, name_rep: str = "Repertoire", task_list=None):  # variable init
+    def __init__(self, name_rep: str = "Repertoire", task_list=None, task_list_name = None):  # variable init
         # super(QWidget,self).__init__()
         if task_list is None:  # create an empty list if none is given
             task_list = []
+        if task_list_name is None:
+            task_list_name = []
         self.__name_rep = name_rep
         self.__task_list = task_list
+        self.__task_list_name = task_list_name
 
     def __str__(self):  # str to print the title in the project
         return f"{self.__name_rep}"
@@ -39,6 +42,11 @@ class Repository:  # (QWidget):
     def changename_rep(self, new_name):  # change the name
         self.__name_rep = new_name
 
+    def export_task_name(self):
+        for task in self.__task_list:
+            self.__task_list_name.append(task.name_task)
+        return self.__task_list_name
+
     @property
     def name_rep(self):
         return self.__name_rep
@@ -47,6 +55,7 @@ class Repository:  # (QWidget):
     def name_rep(self, name_rep):
         self.__name_rep = name_rep
 
+
     @property
     def task_list(self):
         return self.__task_list
@@ -54,3 +63,11 @@ class Repository:  # (QWidget):
     @task_list.setter
     def task_list(self, task_list):
         self.__task_list = task_list
+
+    @property
+    def task_list_name(self):
+        return self.__task_list_name
+
+    @task_list_name.setter
+    def task_list_name(self, task_list_name):
+        self.__task_list_name = task_list_name
