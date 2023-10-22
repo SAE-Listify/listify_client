@@ -65,6 +65,8 @@ class Listify(QWidget):
         self.layout.addWidget(self.sidebarWidget, 0, 0)
         self.layout.addWidget(self.tabWidget, 0, 1)
 
+        self.__projects = []
+
         # Open test tab
         self.__openTab("Projet Test")
         self.__openTab("Projet Test2")
