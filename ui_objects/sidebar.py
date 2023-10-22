@@ -84,9 +84,7 @@ class Sidebar(QWidget):
         # Switch to the clicked project tab
         clicked_button = self.sender()
         index = self.__projects_open_buttons.index(clicked_button)
-        if self.parent.projects[index] in self.parent.opened_projects:
-            self.__switch_to_project_tab(index)
-        else:
+        if not self.parent.projects[index] in self.parent.opened_projects:
             self.parent.open_tab_by_project_index(index)
 
     def __switch_to_project_tab(self, index: int):
