@@ -93,7 +93,7 @@ class Listify(QWidget):
         current_tab["widget"].__layout.addWidget(current_tab["button_test"], 1, 0, 1, 1)
 
         # SETTING
-        current_tab["label_test"].setText(f"Test {len(self.tabs)}")
+        current_tab["label_test"].setText(f"project= {current_tab['project'].name_project}")
 
     def open_tab_by_project_index(self, index: int):
         if index <= len(self.__projects):
