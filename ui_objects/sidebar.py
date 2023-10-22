@@ -23,7 +23,7 @@ class Sidebar(QWidget):
         # Create new project button and its associated delete button
         project_name = self.project_name_textbox.text()
         if not project_name:
-            QMessageBox.warning(self, "Warning!!!", "please entera project name ?")
+            QMessageBox.warning(self, "Warning!!!", "please enter project name ?")
             return
         project_hbox = QHBoxLayout()
         project_button = QPushButton(project_name, self)
@@ -53,4 +53,5 @@ class Sidebar(QWidget):
         self.__switch_to_project_tab(index)
 
     def __switch_to_project_tab(self, index: int):
+        # todo make the logic for later, quite complicated gonna need help for this one
         self.parent.project_tab_widget.setCurrentIndex(index)
