@@ -11,27 +11,27 @@ class Sidebar(QWidget):
         self.__projects_open_buttons = []  # List to store project buttons
         self.__projects_delete_buttons = []    # List to store delete buttons
 
-        self.__setup_projects()
-
-    def __setup_projects(self):
         # Add create button and text box for project name
-        create_button = QPushButton("Create", self)
+        create_button = QPushButton("Créer un projet", self)
         create_button.clicked.connect(self.__create_project)
         self.__layout.addWidget(create_button)
         self.project_name_textbox = QLineEdit(self)
-        self.project_name_textbox.setPlaceholderText("Enter project name")
+        self.project_name_textbox.setPlaceholderText("Nom du projet")
         self.__layout.addWidget(self.project_name_textbox)
 
     def __create_project(self):
         # Create new project button and its associated delete button
         project_name = self.project_name_textbox.text()
         if not project_name:
-            QMessageBox.warning(self, "Warning!!!", "please enter project name ?")
+            QMessageBox.warning(self, "Erreur", "Veuillez choisir un nom!")
             return
         project_hbox = QHBoxLayout()
+
         project_button = QPushButton(project_name, self)
         project_button.clicked.connect(self.__open_project)
         project_hbox.addWidget(project_button)
+
+        # Delete Button
         delete_button = QPushButton('X', self)
         delete_button.setFixedSize(20, 20)
         delete_button.clicked.connect(self.__delete_project)
