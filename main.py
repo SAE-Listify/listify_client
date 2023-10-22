@@ -123,8 +123,8 @@ class Listify(QWidget):
     """
     Set the specified tab index
     """
-    def goto_tab_index(self, index: int):
-        self.tabWidget.setCurrentIndex(index)
+    def goto_last_tab(self):
+        self.tabWidget.setCurrentIndex(len(self.tabs) - 1)
 
     """
     Get projects list for sidebar

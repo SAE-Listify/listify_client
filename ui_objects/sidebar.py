@@ -66,6 +66,7 @@ class Sidebar(QWidget):
 
         # Create the project using the parent (Listify class in main.py) method
         self.parent.new_project(project_name)
+        self.parent.goto_last_tab()
 
     def __delete_project(self):
         # Remove the project button and its associated delete button
@@ -86,6 +87,7 @@ class Sidebar(QWidget):
         index = self.__projects_open_buttons.index(clicked_button)
         if not self.parent.projects[index] in self.parent.opened_projects:
             self.parent.open_tab_by_project_index(index)
+            self.parent.goto_last_tab()
 
     def __switch_to_project_tab(self, index: int):
         # todo make the logic for later, quite complicated gonna need help for this one
