@@ -19,14 +19,16 @@ class Sidebar(QWidget):
         self.project_name_textbox.setPlaceholderText("Nom du projet")
         self.__layout.addWidget(self.project_name_textbox)
 
-    def __create_project(self):
-        # Create new project button and its associated delete button
-        project_name = self.project_name_textbox.text()
-        if not project_name:
-            QMessageBox.warning(self, "Erreur", "Veuillez choisir un nom!")
-            return
+        # Load projects
+        self.__load_projects()
+
+    """
+    This method creates the UI elements present on the sidebar for each project
+    """
+    def __init_project_list_ui_elements(self, project_name):
         project_hbox = QHBoxLayout()
 
+        # Open Button
         project_button = QPushButton(project_name, self)
         project_button.clicked.connect(self.__open_project)
         project_hbox.addWidget(project_button)
@@ -42,6 +44,28 @@ class Sidebar(QWidget):
         self.__projects_delete_buttons.append(delete_button)
         self.__projects_layouts.append(project_hbox)
         self.__layout.addLayout(project_hbox)
+
+    """
+    This methods loads projects available in the main Listify class 
+    """
+    def __load_projects(self):
+        for proj in self.parent.projects:
+            self.__init_project_list_ui_elements(proj.name_project)
+
+    """
+    This method create the project, connected to "create_button"
+    """
+    def __create_project(self):
+        # Create new project button and its associated delete button
+        project_name = self.project_name_textbox.text()
+        if not project_name:
+            QMessageBox.warning(self, "Erreur", "Veuillez choisir un nom!")
+            return
+
+        self.__init_project_list_ui_elements(project_name)
+
+        # Create the project using the parent (Listify class in main.py) method
+        self.parent.new_project(project_name)
 
     def __delete_project(self):
         # Remove the project button and its associated delete button

@@ -50,37 +50,38 @@ class Listify(QWidget):
         self.layout = QGridLayout(self)
         self.setLayout(self.layout)
 
-        # Create Main Listify Widgets Here
+        self.tabs = []
         self.tabWidget = QTabWidget()
-        self.sidebarWidget = ui_objects.Sidebar(parent=self)
-
         self.tabWidget.setTabsClosable(True)
-        self.tabWidget.setMovable(True)
+        self.tabWidget.setMovable(False)    # to test, breaks closing ???
         self.tabWidget.tabCloseRequested.connect(self.__closeTab)
 
-        self.tabs = []
+        self.__projects = []
+        self.new_project("test1")
+        self.new_project("tEsT2")
 
+        # we need to load/create projects before loading the sidebar
+        self.sidebarWidget = ui_objects.Sidebar(parent=self)
         # Add widgets to the main Listify Widget here
         # row: int, column: int, rowSpan: int, columnSpan: int
         self.layout.addWidget(self.sidebarWidget, 0, 0)
         self.layout.addWidget(self.tabWidget, 0, 1)
 
-        # Open test tab
-        self.__openTab("Projet Test")
-        self.__openTab("Projet Test2")
 
-    def __openTab(self, name: str):
+
+
+    def __openTab(self, project: ui_objects.Project):
         self.tabs.append(
             {
                 "widget": QWidget(),
+                "project": project,
                 "label_test": QLabel("placeholder"),
                 "button_test": QPushButton("placeholder"),
             }
         )
-
         current_tab = self.tabs[-1]
 
-        self.tabWidget.addTab(current_tab["widget"], name)
+        self.tabWidget.addTab(current_tab["widget"], current_tab["project"].name_project)
 
         # CREATING LAYOUTS
         current_tab["widget"].__layout = QGridLayout()
@@ -94,10 +95,9 @@ class Listify(QWidget):
         current_tab["widget"].__layout.addWidget(current_tab["label_test"], 0, 0, 1, 1)
         current_tab["widget"].__layout.addWidget(current_tab["button_test"], 1, 0, 1, 1)
 
-
-
         # SETTING
         current_tab["label_test"].setText(f"Test {len(self.tabs)}")
+
 
 
     """
@@ -108,20 +108,27 @@ class Listify(QWidget):
 
         self.tabs.pop(index)
         self.tabWidget.removeTab(index)
+        logging.debug(f"tabs[] = {self.tabs}")
 
 
     """
     Create a new project
     """
     def new_project(self, name):
-        pass
+        new_project = ui_objects.Project(name_project=name)
+        self.__projects.append(new_project)
+        self.__openTab(self.__projects[-1])
+        logging.info(f"new project created: {name}")
+        logging.debug(f"projects: {self.__projects}")
+
 
     """
     Get projects list for sidebar
     """
     @property
     def projects(self):
-        pass
+        return self.__projects
+
 
 
 if __name__ == '__main__':
