@@ -80,13 +80,15 @@ class Sidebar(QWidget):
         delete_button_to_remove.deleteLater()
         layout_to_remove.deleteLater()
 
-
     def __open_project(self):
         # Switch to the clicked project tab
         clicked_button = self.sender()
         index = self.__projects_open_buttons.index(clicked_button)
-        self.__switch_to_project_tab(index)
+        if self.parent.projects[index] in self.parent.opened_projects:
+            self.__switch_to_project_tab(index)
+        else:
+            self.parent.open_tab_by_project_index(index)
 
     def __switch_to_project_tab(self, index: int):
         # todo make the logic for later, quite complicated gonna need help for this one
-        self.parent.project_tab_widget.setCurrentIndex(index)
+        self.parent.goto_tab_index(index)

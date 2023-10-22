@@ -67,9 +67,6 @@ class Listify(QWidget):
         self.layout.addWidget(self.sidebarWidget, 0, 0)
         self.layout.addWidget(self.tabWidget, 0, 1)
 
-
-
-
     def __openTab(self, project: ui_objects.Project):
         self.tabs.append(
             {
@@ -98,7 +95,9 @@ class Listify(QWidget):
         # SETTING
         current_tab["label_test"].setText(f"Test {len(self.tabs)}")
 
-
+    def open_tab_by_project_index(self, index: int):
+        if index <= len(self.__projects):
+            self.__openTab(self.__projects[index])
 
     """
     Executed when a tab is closed by the user, takes the index as its argument
@@ -121,6 +120,11 @@ class Listify(QWidget):
         logging.info(f"new project created: {name}")
         logging.debug(f"projects: {self.__projects}")
 
+    """
+    Set the specified tab index
+    """
+    def goto_tab_index(self, index: int):
+        self.tabWidget.setCurrentIndex(index)
 
     """
     Get projects list for sidebar
@@ -129,6 +133,18 @@ class Listify(QWidget):
     def projects(self):
         return self.__projects
 
+    """
+    Get opened projects
+    """
+    @property
+    def opened_projects(self):
+        opened_projects = []
+        if self.tabs:
+            for tab in self.tabs:
+                opened_projects.append(tab["project"])
+            return opened_projects
+        else:
+            return []
 
 
 if __name__ == '__main__':
