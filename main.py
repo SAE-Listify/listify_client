@@ -147,7 +147,11 @@ class Listify(QWidget):
             return []
 
     def goto_tab(self, index: int):
-        self.tabWidget.setCurrentIndex(index)
+        if 0 <= index < self.tabWidget.count():
+            self.tabWidget.setCurrentIndex(index)
+        else:
+            logging.warning("attemped to go to tab index which is out of bounds.")
+
 
 if __name__ == '__main__':
     app = QApplication(sys.argv)
