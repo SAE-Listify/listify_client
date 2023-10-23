@@ -88,6 +88,12 @@ class Sidebar(QWidget):
         if not self.parent.projects[index] in self.parent.opened_projects:
             self.parent.open_tab_by_project_index(index)
             self.parent.goto_last_tab()
+        else:
+            # Find the index of the opened tab for the project
+            idx = self.parent.opened_projects.index(self.parent.projects[index])
+            self.parent.goto_tab(idx)
+
+
 
     def __switch_to_project_tab(self, index: int):
         # todo make the logic for later, quite complicated gonna need help for this one
