@@ -146,6 +146,8 @@ class Listify(QWidget):
         else:
             return []
 
+    def goto_tab(self, index: int):
+        self.tabWidget.setCurrentIndex(index)
 
 if __name__ == '__main__':
     app = QApplication(sys.argv)
