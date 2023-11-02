@@ -18,12 +18,15 @@ from PyQt5.QtWidgets import (
 
 
 class Task: #(QWidget):
-    def __init__(self, name_task : str = 'Tache', subtask_list = None): #variable init
+    def __init__(self, name_task : str = 'Tache', subtask_list = None, subtask_list_name = None): #variable init
         #super(QWidget, self).__init__()
         if subtask_list is None: #creation of an empty list if none is given
             subtask_list = []
+        if subtask_list_name is None:
+            subtask_list_name = []
         self.__name_task = name_task
         self.__subtask_list = subtask_list
+        self.__subtask_list_name = subtask_list_name
 
     def __str__(self): #str to print the tittle in the project
         return f"{self.__name_task}"
@@ -37,7 +40,10 @@ class Task: #(QWidget):
 
     def changename_task(self, new_name): #change the name of the task
         self.__name_task = new_name
-
+    def export_subtask_name(self):
+        for subtask in self.__repository_list:
+            self.__subtask_list_name.append(subtask.name_subtask)
+        return self.__subtask_list_name
     @property
     def name_task(self):
         return self.__name_task
