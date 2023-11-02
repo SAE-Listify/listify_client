@@ -1,4 +1,4 @@
-from . import repository as repo
+import repository as repo
 import logging
 import sys
 
@@ -22,12 +22,15 @@ from PyQt5.QtGui import QFont, QCloseEvent
 
 
 class Project: #(QWidget):
-    def __init__(self, name_project: str = 'Project', repository_list: list = None):  # variable init
+    def __init__(self, name_project: str = 'Project', repository_list: list = None, repository_list_name = None):  # variable init
         # super(QWidget,self).__init__()
         if repository_list is None:  # creation of an empty list if none is given
             repository_list = []
+        if repository_list_name is None:
+            repository_list_name = []
         self.__name_project = name_project
         self.__repository_list = repository_list
+        self.__repository_list_name = repository_list_name
 
     def __str__(self):  # str to print the tittle in the project
         return f"{self.__name_project}"
@@ -42,6 +45,11 @@ class Project: #(QWidget):
 
     def changename_proj(self, new_name):  # change the name
         self.__name_project = new_name
+
+    def export_repository_name(self):
+        for repo in self.__repository_list:
+            self.__repository_list_name.append(repo.name_rep)
+        return self.__repository_list_name
 
     @property
     def name_project(self):
@@ -58,3 +66,11 @@ class Project: #(QWidget):
     @repository_list.setter
     def repository_list(self, repository_list):
         self.__repository_list = repository_list
+
+    @property
+    def repository_list_name(self):
+        return self.__repository_list_name
+
+    @repository_list_name.setter
+    def repository_list_name(self, repository_list_name):
+        self.__repository_list_name = repository_list_name
