@@ -1,4 +1,4 @@
-from . import subtask as sbts
+import subtask as sbts
 
 from PyQt5.QtWidgets import (
     QApplication,
@@ -38,6 +38,15 @@ class Task: #(QWidget):
     def changename_task(self, new_name): #change the name of the task
         self.__name_task = new_name
 
+    def to_dict(self):  # task
+        subtask_dicts = []
+        for subtask in self.__subtask_list:
+            subtask_dicts.append(subtask.to_dict())
+
+        return {
+            "name": self.__name_task,
+            "subtasks": subtask_dicts,
+        }
     @property
     def name_task(self):
         return self.__name_task

@@ -1,4 +1,4 @@
-from . import task as ts
+import task as ts
 
 from PyQt5.QtWidgets import (
     QApplication,
@@ -38,6 +38,18 @@ class Repository:  # (QWidget):
 
     def changename_rep(self, new_name):  # change the name
         self.__name_rep = new_name
+
+    def to_dict(self):  # repo
+        task_dicts = []
+        for task in self.__task_list:
+            task_dicts.append(task.to_dict())
+
+        return {
+            "name": self.__name_rep,
+            "tasks": task_dicts,
+        }
+
+
 
     @property
     def name_rep(self):

@@ -1,4 +1,4 @@
-from . import repository as repo
+import repository as repo
 import logging
 import sys
 
@@ -43,6 +43,19 @@ class Project: #(QWidget):
     def changename_proj(self, new_name):  # change the name
         self.__name_project = new_name
 
+
+
+    def to_dict(self, name_base="data"):  # project
+        repo_dicts = []
+
+
+        for repo in self.__repository_list:
+            repo_dicts.append(repo.to_dict())
+
+        return {
+            "name_project": self.__name_project,
+            "repositories": repo_dicts,
+        }
     @property
     def name_project(self):
         return self.__name_project
