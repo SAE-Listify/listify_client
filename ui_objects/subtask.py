@@ -25,6 +25,10 @@ class Subtask: #(QWidget):
     def __str__(self): #str to print the tittle in the project
         return f"{self.__name_subtask}"
 
+    def to_dict(self):  # subtask
+        return {
+            "name": self.__name_subtask,
+        }
     def changename_subtask(self, new_name):
         self.__name_subtask = new_name
 
