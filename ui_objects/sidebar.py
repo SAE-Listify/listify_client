@@ -1,4 +1,5 @@
 from PyQt5.QtWidgets import QWidget, QVBoxLayout, QHBoxLayout, QPushButton, QLineEdit, QMessageBox
+from PyQt5.QtCore import Qt
 
 class Sidebar(QWidget):
     def __init__(self, parent: QWidget = None):
@@ -6,6 +7,7 @@ class Sidebar(QWidget):
         super(Sidebar, self).__init__(self.parent)
         self.setFixedWidth(150)
         self.__layout = QVBoxLayout(self)
+        self.__layout.setAlignment(Qt.AlignTop)
 
         self.__projects_layouts = []    # List to store QHBoxLayouts
         self.__projects_open_buttons = []  # List to store project buttons
@@ -46,7 +48,7 @@ class Sidebar(QWidget):
         self.__layout.addLayout(project_hbox)
 
     """
-    This methods loads projects available in the main Listify class 
+    This methods loads projects available in the main Listify class
     """
     def __load_projects(self):
         for proj in self.parent.projects:
@@ -92,7 +94,6 @@ class Sidebar(QWidget):
             # Find the index of the opened tab for the project
             idx = self.parent.opened_projects.index(self.parent.projects[index])
             self.parent.goto_tab(idx)
-
 
 
     def __switch_to_project_tab(self, index: int):
