@@ -7,17 +7,11 @@ from PyQt5.QtWidgets import (
     QWidget,
     QGridLayout,
     QLabel,
-    QLineEdit,
     QPushButton,
-    QComboBox,
-    QMessageBox,
     QTabWidget,
-    QTextBrowser,
-    QHBoxLayout,
-    QMessageBox,
 )
 from PyQt5.QtCore import QCoreApplication
-from PyQt5.QtGui import QFont, QCloseEvent
+from PyQt5.QtGui import QCloseEvent
 
 import ui_objects
 
@@ -30,6 +24,11 @@ else:
 
 
 class MainWindow(QMainWindow):
+    """
+    Listify main window
+
+    Used to initialize the Listify QWidget
+    """
     def __init__(self) -> None:
         super().__init__()
         self.setWindowTitle("Listify")
@@ -43,8 +42,14 @@ class MainWindow(QMainWindow):
 
 
 class Listify(QWidget):
+    """
+    Main Listify QWidget
+
+    It handles the list of projects, the opening of new projects.
+    It also create the QTabWidget and the Sidebar (sidebar.py).
+    """
     def __init__(self, parent: MainWindow):
-        super(QWidget, self).__init__()
+        super().__init__()
         self.parent = parent
         self.layout = QGridLayout(self)
         self.setLayout(self.layout)

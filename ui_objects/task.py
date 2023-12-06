@@ -1,27 +1,21 @@
 from . import subtask as sbts
 
 from PyQt5.QtWidgets import (
-    QApplication,
-    QMainWindow,
-    QWidget,
     QFrame,
-    QGridLayout,
     QLabel,
-    QLineEdit,
     QPushButton,
-    QComboBox,
-    QMessageBox,
-    QTabWidget,
-    QTextBrowser,
-    QHBoxLayout,
     QVBoxLayout,
-    QMessageBox,
 )
 
 
 class Task(QFrame):
+    """
+    Task
+
+    Project => Repository => Task => Subtask
+    """
     def __init__(self, name_task: str = 'Tache', subtask_list=None):  # variable init
-        super(QFrame, self).__init__()
+        super().__init__()
         if subtask_list is None:  # creation of an empty list if none is given
             subtask_list = []
         self.__name_task = name_task

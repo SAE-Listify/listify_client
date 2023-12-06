@@ -1,25 +1,18 @@
 from PyQt5.QtWidgets import (
-    QApplication,
-    QMainWindow,
     QWidget,
-    QFrame,
-    QGridLayout,
     QLabel,
-    QLineEdit,
-    QPushButton,
-    QComboBox,
-    QMessageBox,
-    QTabWidget,
-    QTextBrowser,
-    QHBoxLayout,
     QVBoxLayout,
-    QMessageBox,
 )
 
 
 class Subtask(QWidget):
+    """
+    Subtask
+
+    Project => Repository => Task => Subtask
+    """
     def __init__(self, name_subtask: str = 'Sous-Tâche'):  # variable init
-        super(QWidget, self).__init__()
+        super().__init__()
         self.__name_subtask = name_subtask
 
         # creating a widget (to return) and set layout
