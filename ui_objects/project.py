@@ -1,6 +1,4 @@
 from . import repository as repo
-import logging
-import sys
 
 from PyQt5.QtWidgets import (
     QWidget,
@@ -8,13 +6,17 @@ from PyQt5.QtWidgets import (
     QPushButton,
     QHBoxLayout,
 )
-from PyQt5.QtCore import QCoreApplication, Qt
-from PyQt5.QtGui import QFont, QCloseEvent
+from PyQt5.QtCore import Qt
 
 
 class Project(QWidget):
+    """
+    Project
+
+    Project => Repository => Task => Subtask
+    """
     def __init__(self, name_project: str = 'Project', repository_list: list = None):  # variable init
-        super(QWidget, self).__init__()
+        super().__init__()
 
         if repository_list is None:  # creation of an empty list if none is given
             repository_list = []

@@ -13,8 +13,13 @@ from PyQt5.QtCore import (
 
 
 class Repository(QFrame):
+    """
+    Repository
+
+    Project => Repository => Task => Subtask
+    """
     def __init__(self, name_rep: str = "Repertoire", task_list=None):  # variable init
-        super(QFrame, self).__init__()
+        super().__init__()
         if task_list is None:  # create an empty list if none is given
             task_list = []
         self.__name_rep = name_rep
