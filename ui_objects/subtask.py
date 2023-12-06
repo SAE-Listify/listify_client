@@ -2,6 +2,7 @@ from PyQt5.QtWidgets import (
     QApplication,
     QMainWindow,
     QWidget,
+    QFrame,
     QGridLayout,
     QLabel,
     QLineEdit,
@@ -11,16 +12,22 @@ from PyQt5.QtWidgets import (
     QTabWidget,
     QTextBrowser,
     QHBoxLayout,
+    QVBoxLayout,
     QMessageBox,
 )
-class Subtask: #(QWidget):
 
-    def __init__(self, name_subtask : str = 'Sous-Tâche', subtask_list : list = None): #variable init
-        # super(QWidget, self).__init__()
-        if subtask_list is None: #creation of an empty list if none is given
-            subtask_list = []
+
+class Subtask(QWidget):
+    def __init__(self, name_subtask : str = 'Sous-Tâche'): #variable init
+        super(QWidget, self).__init__()
         self.__name_subtask = name_subtask
-        self.__subtask_list = subtask_list
+
+        # creating a widget (to return) and set layout
+        self.__layout = QVBoxLayout()
+        self.setLayout(self.__layout)
+        self.__subtask_label = QLabel(self.__name_subtask)
+
+        self.__layout.addWidget(self.__subtask_label)
 
     def __str__(self): #str to print the tittle in the project
         return f"{self.__name_subtask}"

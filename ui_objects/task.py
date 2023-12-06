@@ -1,9 +1,10 @@
-import subtask as sbts
+from . import subtask as sbts
 
 from PyQt5.QtWidgets import (
     QApplication,
     QMainWindow,
     QWidget,
+    QFrame,
     QGridLayout,
     QLabel,
     QLineEdit,
@@ -13,25 +14,48 @@ from PyQt5.QtWidgets import (
     QTabWidget,
     QTextBrowser,
     QHBoxLayout,
+    QVBoxLayout,
     QMessageBox,
 )
 
 
-class Task: #(QWidget):
+class Task(QFrame):
     def __init__(self, name_task : str = 'Tache', subtask_list = None): #variable init
-        #super(QWidget, self).__init__()
+        super(QFrame, self).__init__()
         if subtask_list is None: #creation of an empty list if none is given
             subtask_list = []
         self.__name_task = name_task
         self.__subtask_list = subtask_list
 
+        self.setFrameStyle(QFrame.StyledPanel)
+
+        # creating a widget and set layout
+        self.__layout = QVBoxLayout()
+        self.setLayout(self.__layout)
+
+        self.__task_label = QLabel(self.__name_task)
+
+        self.__layout.addWidget(self.__task_label)
+
+        self.__create_subtask_button = QPushButton("Créer une sous-tâche")
+        self.__create_subtask_button.clicked.connect(
+            lambda: self.create_subtask("subtask_test")
+        )
+        self.__layout.addWidget(self.__create_subtask_button)
+
+        if self.__subtask_list:
+            for subtask_widget in self.__subtask_list:
+                self.__layout.addWidget(subtask_widget)
+
     def __str__(self): #str to print the tittle in the project
         return f"{self.__name_task}"
 
-    def create_subtask(self, name_subtask : str = "Sous tache"): #create a subtask using the subtask file
-        self.__subtask_list.append('') #add a new space to the list
-        index = len(self.__subtask_list) #take the index of the new space
-        self.__subtask_list[index-1] = sbts.Subtask(name_subtask) #create the object in the list
+    def create_subtask(self, name_subtask: str = "Sous tache"):  # create a subtask using the subtask file
+        created_subtask = sbts.Subtask(name_subtask)
+        self.__subtask_list.append(created_subtask)  # create the object in the list
+        self.__layout.addWidget(created_subtask)
+
+
     def delete_subtask(self, num): #delete a subtask using the subtask file
         del self.__subtask_list[num]
 

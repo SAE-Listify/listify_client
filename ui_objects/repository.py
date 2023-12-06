@@ -1,4 +1,4 @@
-import task as ts
+from . import task as ts
 
 from PyQt5.QtWidgets import (
     QApplication,
@@ -6,6 +6,7 @@ from PyQt5.QtWidgets import (
     QWidget,
     QGridLayout,
     QLabel,
+    QFrame,
     QLineEdit,
     QPushButton,
     QComboBox,
@@ -13,25 +14,49 @@ from PyQt5.QtWidgets import (
     QTabWidget,
     QTextBrowser,
     QHBoxLayout,
+    QVBoxLayout,
     QMessageBox,
 )
 
+from PyQt5.QtCore import (
+    Qt,
+)
 
-class Repository:  # (QWidget):
+class Repository(QFrame):
     def __init__(self, name_rep: str = "Repertoire", task_list=None):  # variable init
-        # super(QWidget,self).__init__()
+        super(QFrame, self).__init__()
         if task_list is None:  # create an empty list if none is given
             task_list = []
         self.__name_rep = name_rep
         self.__task_list = task_list
 
+        self.setFrameStyle(QFrame.StyledPanel)
+
+        # creating a widget (to return) and set layout
+        self.__layout = QVBoxLayout()
+        self.__layout.setAlignment(Qt.AlignTop)
+        self.setLayout(self.__layout)
+
+        self.__repo_label = QLabel(self.__name_rep)
+        self.__layout.addWidget(self.__repo_label)
+
+        self.__create_task_button = QPushButton("Créer une tâche")
+        self.__create_task_button.clicked.connect(
+            lambda: self.create_task("task_test")
+        )
+        self.__layout.addWidget(self.__create_task_button)
+
+        if self.__task_list:
+            for task_widget in self.__task_list:
+                self.__layout.addWidget(task_widget)
+
     def __str__(self):  # str to print the title in the project
         return f"{self.__name_rep}"
 
     def create_task(self, name_task: str = "Tache"):  # crawte a task with the file task.py
-        self.__task_list.append('')  # add a new space in the list
-        index = len(self.__task_list)  # take the index of the new place
-        self.__task_list[index - 1] = ts.Task(name_task)  # create the object in the list
+        created_task = ts.Task(name_task)
+        self.__task_list.append(created_task)  # create the object in the list
+        self.__layout.addWidget(created_task)
 
     def delete_task(self, num: int):
         del self.__task_list[num]

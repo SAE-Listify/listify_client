@@ -60,6 +60,8 @@ class Listify(QWidget):
         self.new_project("test1")
         self.new_project("tEsT2")
 
+        self.__projects[0].create_repository("REPO TEST")
+
         # we need to load/create projects before loading the sidebar
         self.sidebarWidget = ui_objects.Sidebar(parent=self)
         # Add widgets to the main Listify Widget here
@@ -89,11 +91,13 @@ class Listify(QWidget):
         # CREATING WIDGETS
         # row: int, column: int, rowSpan: int, columnSpan: int
         ### TESTING
-        current_tab["widget"].__layout.addWidget(current_tab["label_test"], 0, 0, 1, 1)
-        current_tab["widget"].__layout.addWidget(current_tab["button_test"], 1, 0, 1, 1)
+        # current_tab["widget"].__layout.addWidget(current_tab["label_test"], 0, 0, 1, 1)
+        # current_tab["widget"].__layout.addWidget(current_tab["button_test"], 1, 0, 1, 1)
+        #
+        # # SETTING
+        # current_tab["label_test"].setText(f"project= {current_tab['project'].name_project}")
 
-        # SETTING
-        current_tab["label_test"].setText(f"project= {current_tab['project'].name_project}")
+        current_tab["widget"].__layout.addWidget(current_tab["project"], 0, 0, 1, 1)
 
     def open_tab_by_project_index(self, index: int):
         if index <= len(self.__projects):
