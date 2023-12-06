@@ -21,7 +21,6 @@ from PyQt5.QtGui import QFont, QCloseEvent
 
 import ui_objects
 
-
 DEBUG = True
 
 if DEBUG:
@@ -53,7 +52,7 @@ class Listify(QWidget):
         self.tabs = []
         self.tabWidget = QTabWidget()
         self.tabWidget.setTabsClosable(True)
-        self.tabWidget.setMovable(False)    # to test, breaks closing ???
+        self.tabWidget.setMovable(False)  # to test, breaks closing ???
         self.tabWidget.tabCloseRequested.connect(self.__closeTab)
 
         self.__projects = []
@@ -106,6 +105,7 @@ class Listify(QWidget):
     """
     Executed when a tab is closed by the user, takes the index as its argument
     """
+
     def __closeTab(self, index: int):
         logging.info(f"Closing Tab index {index}")
 
@@ -113,10 +113,10 @@ class Listify(QWidget):
         self.tabWidget.removeTab(index)
         logging.debug(f"tabs[] = {self.tabs}")
 
-
     """
     Create a new project
     """
+
     def new_project(self, name):
         new_project = ui_objects.Project(name_project=name)
         self.__projects.append(new_project)
@@ -127,12 +127,14 @@ class Listify(QWidget):
     """
     Set the specified tab index
     """
+
     def goto_last_tab(self):
         self.tabWidget.setCurrentIndex(len(self.tabs) - 1)
 
     """
     Get projects list for sidebar
     """
+
     @property
     def projects(self):
         return self.__projects
@@ -140,6 +142,7 @@ class Listify(QWidget):
     """
     Get opened projects
     """
+
     @property
     def opened_projects(self):
         opened_projects = []

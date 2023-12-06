@@ -22,6 +22,7 @@ from PyQt5.QtCore import (
     Qt,
 )
 
+
 class Repository(QFrame):
     def __init__(self, name_rep: str = "Repertoire", task_list=None):  # variable init
         super(QFrame, self).__init__()
@@ -73,8 +74,6 @@ class Repository(QFrame):
             "name": self.__name_rep,
             "tasks": task_dicts,
         }
-
-
 
     @property
     def name_rep(self):

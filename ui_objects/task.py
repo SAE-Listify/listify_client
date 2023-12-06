@@ -20,9 +20,9 @@ from PyQt5.QtWidgets import (
 
 
 class Task(QFrame):
-    def __init__(self, name_task : str = 'Tache', subtask_list = None): #variable init
+    def __init__(self, name_task: str = 'Tache', subtask_list=None):  # variable init
         super(QFrame, self).__init__()
-        if subtask_list is None: #creation of an empty list if none is given
+        if subtask_list is None:  # creation of an empty list if none is given
             subtask_list = []
         self.__name_task = name_task
         self.__subtask_list = subtask_list
@@ -47,7 +47,7 @@ class Task(QFrame):
             for subtask_widget in self.__subtask_list:
                 self.__layout.addWidget(subtask_widget)
 
-    def __str__(self): #str to print the tittle in the project
+    def __str__(self):  # str to print the tittle in the project
         return f"{self.__name_task}"
 
     def create_subtask(self, name_subtask: str = "Sous tache"):  # create a subtask using the subtask file
@@ -55,11 +55,10 @@ class Task(QFrame):
         self.__subtask_list.append(created_subtask)  # create the object in the list
         self.__layout.addWidget(created_subtask)
 
-
-    def delete_subtask(self, num): #delete a subtask using the subtask file
+    def delete_subtask(self, num):  # delete a subtask using the subtask file
         del self.__subtask_list[num]
 
-    def changename_task(self, new_name): #change the name of the task
+    def changename_task(self, new_name):  # change the name of the task
         self.__name_task = new_name
 
     def to_dict(self):  # task
@@ -71,6 +70,7 @@ class Task(QFrame):
             "name": self.__name_task,
             "subtasks": subtask_dicts,
         }
+
     @property
     def name_task(self):
         return self.__name_task

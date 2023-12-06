@@ -1,6 +1,7 @@
 from PyQt5.QtWidgets import QWidget, QVBoxLayout, QHBoxLayout, QPushButton, QLineEdit, QMessageBox
 from PyQt5.QtCore import Qt
 
+
 class Sidebar(QWidget):
     def __init__(self, parent: QWidget = None):
         self.parent = parent
@@ -9,9 +10,9 @@ class Sidebar(QWidget):
         self.__layout = QVBoxLayout(self)
         self.__layout.setAlignment(Qt.AlignTop)
 
-        self.__projects_layouts = []    # List to store QHBoxLayouts
+        self.__projects_layouts = []  # List to store QHBoxLayouts
         self.__projects_open_buttons = []  # List to store project buttons
-        self.__projects_delete_buttons = []    # List to store delete buttons
+        self.__projects_delete_buttons = []  # List to store delete buttons
 
         # Add create button and text box for project name
         create_button = QPushButton("Créer un projet", self)
@@ -27,6 +28,7 @@ class Sidebar(QWidget):
     """
     This method creates the UI elements present on the sidebar for each project
     """
+
     def __init_project_list_ui_elements(self, project_name):
         project_hbox = QHBoxLayout()
 
@@ -50,6 +52,7 @@ class Sidebar(QWidget):
     """
     This methods loads projects available in the main Listify class
     """
+
     def __load_projects(self):
         for proj in self.parent.projects:
             self.__init_project_list_ui_elements(proj.name_project)
@@ -57,6 +60,7 @@ class Sidebar(QWidget):
     """
     This method create the project, connected to "create_button"
     """
+
     def __create_project(self):
         # Create new project button and its associated delete button
         project_name = self.project_name_textbox.text()
@@ -94,7 +98,6 @@ class Sidebar(QWidget):
             # Find the index of the opened tab for the project
             idx = self.parent.opened_projects.index(self.parent.projects[index])
             self.parent.goto_tab(idx)
-
 
     def __switch_to_project_tab(self, index: int):
         # todo make the logic for later, quite complicated gonna need help for this one
