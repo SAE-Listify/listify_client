@@ -3,20 +3,10 @@ import logging
 import sys
 
 from PyQt5.QtWidgets import (
-    QApplication,
-    QMainWindow,
     QWidget,
-    QGridLayout,
     QLabel,
-    QLineEdit,
     QPushButton,
-    QComboBox,
-    QMessageBox,
-    QTabWidget,
-    QTextBrowser,
     QHBoxLayout,
-    QVBoxLayout,
-    QMessageBox,
 )
 from PyQt5.QtCore import QCoreApplication, Qt
 from PyQt5.QtGui import QFont, QCloseEvent

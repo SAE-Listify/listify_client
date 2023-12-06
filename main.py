@@ -7,17 +7,11 @@ from PyQt5.QtWidgets import (
     QWidget,
     QGridLayout,
     QLabel,
-    QLineEdit,
     QPushButton,
-    QComboBox,
-    QMessageBox,
     QTabWidget,
-    QTextBrowser,
-    QHBoxLayout,
-    QMessageBox,
 )
 from PyQt5.QtCore import QCoreApplication
-from PyQt5.QtGui import QFont, QCloseEvent
+from PyQt5.QtGui import QCloseEvent
 
 import ui_objects
 

@@ -1,21 +1,10 @@
 from . import task as ts
 
 from PyQt5.QtWidgets import (
-    QApplication,
-    QMainWindow,
-    QWidget,
-    QGridLayout,
     QLabel,
     QFrame,
-    QLineEdit,
     QPushButton,
-    QComboBox,
-    QMessageBox,
-    QTabWidget,
-    QTextBrowser,
-    QHBoxLayout,
     QVBoxLayout,
-    QMessageBox,
 )
 
 from PyQt5.QtCore import (
