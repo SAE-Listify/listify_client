@@ -59,8 +59,6 @@ class Listify(QWidget):
         self.new_project("test1")
         self.new_project("tEsT2")
 
-        self.__projects[0].create_repository("REPO TEST")
-
         # we need to load/create projects before loading the sidebar
         self.sidebarWidget = ui_objects.Sidebar(parent=self)
         # Add widgets to the main Listify Widget here
