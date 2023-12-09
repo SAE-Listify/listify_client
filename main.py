@@ -155,7 +155,7 @@ class Listify(QWidget):
         if 0 <= index < self.tabWidget.count():
             self.tabWidget.setCurrentIndex(index)
         else:
-            logging.warning("attemped to go to tab index which is out of bounds.")
+            logging.warning("attempted to go to tab index which is out of bounds.")
 
 
 if __name__ == '__main__':

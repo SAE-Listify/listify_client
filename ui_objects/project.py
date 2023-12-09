@@ -37,17 +37,17 @@ class Project(QWidget):
         self.__layout.addLayout(self.__layoutRepo)
 
         self.__project_label = QLabel(self.__name_project)
-        self.__layout.addWidget(self.__project_label)
 
         self.__create_repo_button = QPushButton("Créer un repository")
         self.__create_repo_button.clicked.connect(
             lambda: self.create_repository("repo_test")
         )
-        self.__layout.addWidget(self.__create_repo_button)
+        #self.__layout.addWidget(self.__create_repo_button)
+        self.__button_layout.addWidget(self.__create_repo_button)
 
         if self.__repository_list:
             for repo_widget in self.__repository_list:
-                self.__layout.addWidget(repo_widget)
+                self.__layoutRepo.addWidget(repo_widget)
 
     def __str__(self):  # str to print the tittle in the project
         return f"{self.__name_project}"
