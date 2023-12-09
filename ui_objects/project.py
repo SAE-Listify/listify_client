@@ -8,7 +8,7 @@ from PyQt5.QtWidgets import (
     QVBoxLayout,
 )
 from PyQt5.QtCore import Qt
-
+#comentiare
 
 class Project(QWidget):
     """
