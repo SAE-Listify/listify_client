@@ -26,6 +26,7 @@ class Repository(QFrame):
         self.__task_list = task_list
 
         self.setFrameStyle(QFrame.StyledPanel)
+        self.setFixedWidth(400)
 
         # creating a widget (to return) and set layout
         self.__layout = QVBoxLayout()
@@ -33,6 +34,8 @@ class Repository(QFrame):
         self.setLayout(self.__layout)
 
         self.__repo_label = QLabel(self.__name_rep)
+        # TODO : Change name of repo on dbl click
+        # self.__repo_label.mouseDoubleClickEvent()
         self.__layout.addWidget(self.__repo_label)
 
         self.__create_task_button = QPushButton("Créer une tâche")

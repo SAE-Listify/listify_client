@@ -64,8 +64,6 @@ class Listify(QWidget):
         self.new_project("test1")
         self.new_project("tEsT2")
 
-        self.__projects[0].create_repository("REPO TEST")
-
         # we need to load/create projects before loading the sidebar
         self.sidebarWidget = ui_objects.Sidebar(parent=self)
         # Add widgets to the main Listify Widget here
@@ -162,7 +160,7 @@ class Listify(QWidget):
         if 0 <= index < self.tabWidget.count():
             self.tabWidget.setCurrentIndex(index)
         else:
-            logging.warning("attemped to go to tab index which is out of bounds.")
+            logging.warning("attempted to go to tab index which is out of bounds.")
 
 
 if __name__ == '__main__':
