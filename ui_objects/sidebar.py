@@ -3,9 +3,15 @@ from PyQt5.QtCore import Qt
 
 
 class Sidebar(QWidget):
+    """
+    Sidebar Widget
+
+    It uses methods of the main Listify Widget to manage the list of projects.
+    It can reopen closed tabs, delete projects and create new projects.
+    """
     def __init__(self, parent: QWidget = None):
         self.parent = parent
-        super(Sidebar, self).__init__(self.parent)
+        super().__init__(self.parent)
         self.setFixedWidth(150)
         self.__layout = QVBoxLayout(self)
         self.__layout.setAlignment(Qt.AlignTop)

@@ -6,9 +6,9 @@ from PyQt5.QtWidgets import (
     QPushButton,
     QHBoxLayout,
     QVBoxLayout,
+
 )
 from PyQt5.QtCore import Qt
-#comentiare
 
 class Project(QWidget):
     """
