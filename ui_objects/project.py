@@ -6,7 +6,7 @@ from PyQt5.QtWidgets import (
     QPushButton,
     QHBoxLayout,
     QVBoxLayout,
-
+    QScrollArea,
 )
 from PyQt5.QtCore import Qt
 
@@ -36,10 +36,18 @@ class Project(QWidget):
         self.__layout.setAlignment(Qt.AlignTop)
         self.setLayout(self.__layout)
 
+        # creating a widget & its layout to put in QScrollArea for the repos
         self.__layout_repo = QHBoxLayout()
-        self.__layout_repo.setAlignment(Qt.AlignLeft)
+        self.__layout_repo.setAlignment(Qt.AlignLeft)   # do not center the repos
+        self.__scrollable_widget = QWidget()
+        self.__scrollable_widget.setLayout(self.__layout_repo)
 
-        self.__project_label = QLabel(self.__name_project)
+        # creating the QScrollArea
+        self.__scroll_area = QScrollArea()
+        self.__scroll_area.setHorizontalScrollBarPolicy(Qt.ScrollBarAsNeeded)
+        self.__scroll_area.setVerticalScrollBarPolicy(Qt.ScrollBarAsNeeded)
+        self.__scroll_area.setWidgetResizable(True)
+        self.__scroll_area.setWidget(self.__scrollable_widget)
 
         self.__create_repo_button = QPushButton("Créer un repository")
         self.__create_repo_button.clicked.connect(
@@ -48,7 +56,7 @@ class Project(QWidget):
 
         # adding the button and the repos layout to the main project layout
         self.__layout.addWidget(self.__create_repo_button)
-        self.__layout.addLayout(self.__layout_repo)
+        self.__layout.addWidget(self.__scroll_area)
 
         if self.__repository_list:
             for repo_widget in self.__repository_list:
