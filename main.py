@@ -29,7 +29,11 @@ class MainWindow(QMainWindow):
 
     Used to initialize the Listify QWidget
     """
+
     def __init__(self) -> None:
+        """
+        Sets the Listify widget as the mainWidget of the window.
+        """
         super().__init__()
         self.setWindowTitle("Listify")
         self.setMinimumSize(1000, 500)
@@ -38,6 +42,11 @@ class MainWindow(QMainWindow):
         self.show()
 
     def closeEvent(self, _e: QCloseEvent):
+        """
+        closes the listify window
+        :param _e:
+        :return:
+        """
         QCoreApplication.exit(0)
 
 
@@ -48,7 +57,12 @@ class Listify(QWidget):
     It handles the list of projects, the opening of new projects.
     It also create the QTabWidget and the Sidebar (sidebar.py).
     """
+
     def __init__(self, parent: MainWindow):
+        """
+        The __init__ method creates the main Listify widgets and add them to the Main Window
+        :param parent:
+        """
         super().__init__()
         self.parent = parent
         self.layout = QGridLayout(self)
@@ -72,6 +86,11 @@ class Listify(QWidget):
         self.layout.addWidget(self.tabWidget, 0, 1)
 
     def __openTab(self, project: ui_objects.Project):
+        """
+        __openTab() takes a project as an argument and opens it in a new tab
+        :param project: ui_objects.Project
+        :return:
+        """
         self.tabs.append(
             {
                 "widget": QWidget(),
@@ -102,52 +121,52 @@ class Listify(QWidget):
         current_tab["widget"].__layout.addWidget(current_tab["project"], 0, 0, 1, 1)
 
     def open_tab_by_project_index(self, index: int):
+        """
+        Used by the sidebar to open a tab by its index in the list
+        :param index: int
+        :return:
+        """
         if index <= len(self.__projects):
             self.__openTab(self.__projects[index])
 
-    """
-    Executed when a tab is closed by the user, takes the index as its argument
-    """
-
     def __closeTab(self, index: int):
+        """
+        Executed when a tab is closed by the user, takes the index as its argument
+        """
         logging.info(f"Closing Tab index {index}")
 
         self.tabs.pop(index)
         self.tabWidget.removeTab(index)
         logging.debug(f"tabs[] = {self.tabs}")
 
-    """
-    Create a new project
-    """
-
     def new_project(self, name):
+        """
+        Create a new project
+        """
         new_project = ui_objects.Project(name_project=name)
         self.__projects.append(new_project)
         self.__openTab(self.__projects[-1])
         logging.info(f"new project created: {name}")
         logging.debug(f"projects: {self.__projects}")
 
-    """
-    Set the specified tab index
-    """
-
     def goto_last_tab(self):
+        """
+        Show the last tab, used on project creation by the sidebar
+        """
         self.tabWidget.setCurrentIndex(len(self.tabs) - 1)
-
-    """
-    Get projects list for sidebar
-    """
 
     @property
     def projects(self):
+        """
+        Get projects list for sidebar
+        """
         return self.__projects
-
-    """
-    Get opened projects
-    """
 
     @property
     def opened_projects(self):
+        """
+        Get opened projects for sidebar (to either switch to the tab or open the project)
+        """
         opened_projects = []
         if self.tabs:
             for tab in self.tabs:
@@ -157,6 +176,11 @@ class Listify(QWidget):
             return []
 
     def goto_tab(self, index: int):
+        """
+        Goto the tab at the given index
+        :param index: int
+        :return:
+        """
         if 0 <= index < self.tabWidget.count():
             self.tabWidget.setCurrentIndex(index)
         else:

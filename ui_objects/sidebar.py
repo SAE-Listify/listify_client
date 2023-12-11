@@ -9,7 +9,12 @@ class Sidebar(QWidget):
     It uses methods of the main Listify Widget to manage the list of projects.
     It can reopen closed tabs, delete projects and create new projects.
     """
+
     def __init__(self, parent: QWidget = None):
+        """
+        inits the different ui elements for the sidebar
+        :param parent: Listify widget
+        """
         self.parent = parent
         super().__init__(self.parent)
         self.setFixedWidth(150)
@@ -31,11 +36,10 @@ class Sidebar(QWidget):
         # Load projects
         self.__load_projects()
 
-    """
-    This method creates the UI elements present on the sidebar for each project
-    """
-
     def __init_project_list_ui_elements(self, project_name):
+        """
+        This method creates the UI elements present on the sidebar for each project
+        """
         project_hbox = QHBoxLayout()
 
         # Open Button
@@ -55,19 +59,17 @@ class Sidebar(QWidget):
         self.__projects_layouts.append(project_hbox)
         self.__layout.addLayout(project_hbox)
 
-    """
-    This methods loads projects available in the main Listify class
-    """
-
     def __load_projects(self):
+        """
+        This methods loads projects available in the main Listify class
+        """
         for proj in self.parent.projects:
             self.__init_project_list_ui_elements(proj.name_project)
 
-    """
-    This method create the project, connected to "create_button"
-    """
-
     def __create_project(self):
+        """
+        This method create the project, connected to "create_button"
+        """
         # Create new project button and its associated delete button
         project_name = self.project_name_textbox.text()
         if not project_name:
@@ -81,6 +83,10 @@ class Sidebar(QWidget):
         self.parent.goto_last_tab()
 
     def __delete_project(self):
+        """
+        deletes the project, connected to "delete_button"
+        :return:
+        """
         # Remove the project button and its associated delete button
         clicked_button = self.sender()  # Returns the button object of the clicked button
         index = self.__projects_delete_buttons.index(clicked_button)
@@ -94,6 +100,10 @@ class Sidebar(QWidget):
         layout_to_remove.deleteLater()
 
     def __open_project(self):
+        """
+        opens the project, connected to "open_button"
+        :return:
+        """
         # Switch to the clicked project tab
         clicked_button = self.sender()
         index = self.__projects_open_buttons.index(clicked_button)
@@ -106,5 +116,10 @@ class Sidebar(QWidget):
             self.parent.goto_tab(idx)
 
     def __switch_to_project_tab(self, index: int):
-        # todo make the logic for later, quite complicated gonna need help for this one
+        """
+        goto the "index"th tab of the listify widget
+        :param index:
+        :return:
+        """
+        # tod make the logic for later, quite complicated gonna need help for this one
         self.parent.goto_tab_index(index)
