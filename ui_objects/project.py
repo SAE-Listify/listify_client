@@ -10,13 +10,20 @@ from PyQt5.QtWidgets import (
 )
 from PyQt5.QtCore import Qt
 
+
 class Project(QWidget):
     """
     Project
 
     Project => Repository => Task => Subtask
     """
+
     def __init__(self, name_project: str = 'Project', repository_list: list = None):  # variable init
+        """
+        Creates the ui objects, passing a repo list is optional
+        :param name_project: str
+        :param repository_list: list
+        """
         super().__init__()
 
         if repository_list is None:  # creation of an empty list if none is given
@@ -26,12 +33,11 @@ class Project(QWidget):
 
         # Creating layouts and widgets
         self.__layout = QVBoxLayout()
-        self.__layout .setAlignment(Qt.AlignTop)
+        self.__layout.setAlignment(Qt.AlignTop)
         self.setLayout(self.__layout)
 
         self.__layout_repo = QHBoxLayout()
         self.__layout_repo.setAlignment(Qt.AlignLeft)
-
 
         self.__project_label = QLabel(self.__name_project)
 
@@ -48,21 +54,37 @@ class Project(QWidget):
             for repo_widget in self.__repository_list:
                 self.__layout_repo.addWidget(repo_widget)
 
-    def __str__(self):  # str to print the tittle in the project
+    def __str__(self):
+        """
+        str to print the title in the project
+        :return: name of the project
+        """
         return f"{self.__name_project}"
 
-    def create_repository(self, name_repository):  # crate a repository with the file task.py
+    def create_repository(self, name_repository):
+        """
+        create a repository
+        :param name_repository: str
+        :return:
+        """
         repo_created = repo.Repository(f"{name_repository}")
         self.__repository_list.append(repo_created)  # create the object in the list
         self.__layout_repo.addWidget(repo_created)
 
-    def delete_repository(self, num: int):  # delete the repository from the project
+    def delete_repository(self, num: int):
+        """
+        delete the "num"th repository from the project
+        :param num:
+        :return:
+        """
         del self.__repository_list[num]
 
-    def changename_proj(self, new_name):  # change the name
-        self.__name_project = new_name
-
-    def to_dict(self, name_base="data"):  # project
+    def to_dict(self):
+        """
+        exports the project to a dictionary for json serialization,
+        it calls its children to_dict() methods
+        :return: dict of the project
+        """
         repo_dicts = []
 
         for repo in self.__repository_list:
@@ -75,16 +97,34 @@ class Project(QWidget):
 
     @property
     def name_project(self):
+        """
+        returns the name of the project
+        :return: name of the project
+        """
         return self.__name_project
 
     @name_project.setter
     def name_project(self, name_project):
+        """
+        sets the name of the project
+        :param name_project: str
+        :return:
+        """
         self.__name_project = name_project
 
     @property
     def repository_list(self):
+        """
+        returns the list of repositories
+        :return: list of repos
+        """
         return self.__repository_list
 
     @repository_list.setter
     def repository_list(self, repository_list):
+        """
+        sets the list of repositories
+        :param repository_list:
+        :return:
+        """
         self.__repository_list = repository_list

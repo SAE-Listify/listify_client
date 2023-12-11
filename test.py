@@ -16,12 +16,22 @@ def test_app():
 
 # testing repository
 def test_repository_initialization(test_app):
+    """
+    Test that we can create a repository object
+    :param test_app:
+    :return:
+    """
     repository = Repository()
     assert repository.name_rep == "Repertoire"
     assert repository.task_list == []
 
 
 def test_repository_add_task(test_app):
+    """
+    Test that we can add a task to the repository
+    :param test_app:
+    :return:
+    """
     repository = Repository()
     repository.create_task("Test Task")
     assert len(repository.task_list) == 1
@@ -30,6 +40,11 @@ def test_repository_add_task(test_app):
 
 # testing task
 def test_task_initialization(test_app):
+    """
+    Test that we can create a task object
+    :param test_app:
+    :return:
+    """
     task = ts()
     assert task.name_task == "Tache"
     assert task.subtask_list == []
@@ -37,13 +52,24 @@ def test_task_initialization(test_app):
 
 # testing subtask
 def test_task_create_subtask(test_app):
+    """
+    Test that we can aadd a subtask to a task
+    :param test_app:
+    :return:
+    """
     task = ts()
     task.create_subtask("Subtask 1")
     assert len(task.subtask_list) == 1
     assert task.subtask_list[0].name_subtask == "Subtask 1"
 
+
 # testing to_dict
 def test_project_to_dict(test_app):
+    """
+    Test that the project exports to a dict correctly
+    :param test_app:
+    :return:
+    """
     project = Project("TheProject")
     project.create_repository("Repo1")
     project.repository_list[0].create_task("Task1")
@@ -71,6 +97,13 @@ def test_project_to_dict(test_app):
 
 # testing sidebar
 def test_sidebar_button_click(test_app, qtbot):
+    """
+    Test if the sidebar is working correctly
+    :param test_app:
+    :param qtbot:
+    :return:
+    """
+
     class MockParent(QWidget):
         def __init__(self):
             super().__init__()

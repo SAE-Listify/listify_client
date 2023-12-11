@@ -14,7 +14,13 @@ class Task(QFrame):
 
     Project => Repository => Task => Subtask
     """
-    def __init__(self, name_task: str = 'Tache', subtask_list=None):  # variable init
+
+    def __init__(self, name_task: str = 'Tache', subtask_list=None):
+        """
+        create the task's ui elements, passing a subtask is optional
+        :param name_task: name of task
+        :param subtask_list: list of subtask
+        """
         super().__init__()
         if subtask_list is None:  # creation of an empty list if none is given
             subtask_list = []
@@ -41,21 +47,38 @@ class Task(QFrame):
             for subtask_widget in self.__subtask_list:
                 self.__layout.addWidget(subtask_widget)
 
-    def __str__(self):  # str to print the tittle in the project
+    def __str__(self):  # str to print the title in the project
+        """
+        return the task's name when printing
+        :return:
+        """
         return f"{self.__name_task}"
 
-    def create_subtask(self, name_subtask: str = "Sous tache"):  # create a subtask using the subtask file
+    def create_subtask(self, name_subtask: str = "Sous tache"):
+        """
+        create a subtask with a name
+        :param name_subtask: str
+        :return:
+        """
         created_subtask = sbts.Subtask(name_subtask)
         self.__subtask_list.append(created_subtask)  # create the object in the list
         self.__layout.addWidget(created_subtask)
 
-    def delete_subtask(self, num):  # delete a subtask using the subtask file
+    def delete_subtask(self, num):
+        """
+        delete the "num"th subtask
+        :param num:
+        :return:
+        """
         del self.__subtask_list[num]
 
-    def changename_task(self, new_name):  # change the name of the task
-        self.__name_task = new_name
-
-    def to_dict(self):  # task
+    def to_dict(self):
+        """
+        exports the task to a dictionary for json serialization,
+        called by the task's parent,
+        it calls its children to_dict() methods
+        :return: dict of the task
+        """
         subtask_dicts = []
         for subtask in self.__subtask_list:
             subtask_dicts.append(subtask.to_dict())
@@ -67,16 +90,34 @@ class Task(QFrame):
 
     @property
     def name_task(self):
+        """
+        returns the name of the task
+        :return: str: name of the task
+        """
         return self.__name_task
 
     @name_task.setter
     def name_task(self, name_task):
+        """
+        sets the name of the task
+        :param name_task: str
+        :return:
+        """
         self.__name_task = name_task
 
     @property
     def subtask_list(self):
+        """
+        returns the list of subtasks
+        :return: list
+        """
         return self.__subtask_list
 
     @subtask_list.setter
     def subtask_list(self, subtask_list):
+        """
+        sets the list of subtasks
+        :param subtask_list: list
+        :return:
+        """
         self.__subtask_list = subtask_list
