@@ -15,7 +15,7 @@ def test_app():
 
 
 # testing repository
-def test_repository_initialization():
+def test_repository_initialization(test_app):
     repository = Repository()
     assert repository.name_rep == "Repertoire"
     assert repository.task_list == []
