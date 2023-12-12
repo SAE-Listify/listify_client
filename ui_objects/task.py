@@ -5,6 +5,7 @@ from PyQt5.QtWidgets import (
     QLabel,
     QPushButton,
     QVBoxLayout,
+    QInputDialog,
 )
 
 
@@ -39,7 +40,7 @@ class Task(QFrame):
 
         self.__create_subtask_button = QPushButton("Créer une sous-tâche")
         self.__create_subtask_button.clicked.connect(
-            lambda: self.create_subtask("subtask_test")
+            lambda: self.create_subtask("subtask")
         )
         self.__layout.addWidget(self.__create_subtask_button)
 
@@ -60,6 +61,9 @@ class Task(QFrame):
         :param name_subtask: str
         :return:
         """
+        name_subtask, ok = QInputDialog.getText(self, 'Nom du repository', 'Entrez le nom du repository:')
+        if not ok:
+            return  # exit if the user cancel
         created_subtask = sbts.Subtask(name_subtask)
         self.__subtask_list.append(created_subtask)  # create the object in the list
         self.__layout.addWidget(created_subtask)

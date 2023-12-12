@@ -5,6 +5,7 @@ from PyQt5.QtWidgets import (
     QFrame,
     QPushButton,
     QVBoxLayout,
+    QInputDialog,
 )
 
 from PyQt5.QtCore import (
@@ -46,7 +47,7 @@ class Repository(QFrame):
 
         self.__create_task_button = QPushButton("Créer une tâche")
         self.__create_task_button.clicked.connect(
-            lambda: self.create_task("task_test")
+            lambda: self.create_task()
         )
         self.__layout.addWidget(self.__create_task_button)
 
@@ -67,6 +68,9 @@ class Repository(QFrame):
         :param name_task:
         :return:
         """
+        name_task, ok = QInputDialog.getText(self, 'Nom de la tache', 'Entrez le nom de la tache:')
+        if not ok:
+            return  # exit if the user cancel
         created_task = ts.Task(name_task)
         self.__task_list.append(created_task)  # create the object in the list
         self.__layout.addWidget(created_task)
