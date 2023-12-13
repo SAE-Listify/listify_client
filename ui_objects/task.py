@@ -5,6 +5,8 @@ from PyQt5.QtWidgets import (
     QLabel,
     QPushButton,
     QVBoxLayout,
+    QCheckBox,
+    QComboBox
 )
 
 
@@ -47,6 +49,26 @@ class Task(QFrame):
             for subtask_widget in self.__subtask_list:
                 self.__layout.addWidget(subtask_widget)
 
+
+        # Check box to check if the task is done
+        self.__checkbox = QCheckBox("Tâche terminée")
+        self.__checkbox.stateChanged.connect(self.validate_task)
+        self.__layout.addWidget(self.__checkbox)
+
+
+        #priority of the task
+        self.__priority = 0
+        self.__priority_label = QLabel("Priorité : ")
+        self.__priority_list = QComboBox()
+        self.__priority_list.addItem("Basse")
+        self.__priority_list.addItem("Moyenne")
+        self.__priority_list.addItem("Haute")
+        self.__priority_list.addItem("Urgente")
+
+        self.__layout.addWidget(self.__priority_label)
+        self.__layout.addWidget(self.__priority_list)
+
+
     def __str__(self):  # str to print the title in the project
         """
         return the task's name when printing
@@ -72,6 +94,32 @@ class Task(QFrame):
         """
         del self.__subtask_list[num]
 
+    def validate_task(self):
+        """
+        check if the task is done
+        :return:
+        """
+        if self.__checkbox.isChecked():
+            self.__task_label.setDisabled(True)
+            return True
+        else:
+            return False
+
+    def priority_task(self):
+        """
+        return the priority of the task
+        :return:
+        """
+        if self.__priority_list.currentText() == "Basse":
+            self.__priority = 0
+        elif self.__priority_list.currentText() == "Moyenne":
+            self.__priority = 1
+        elif self.__priority_list.currentText() == "Haute":
+            self.__priority = 2
+        elif self.__priority_list.currentText() == "Urgente":
+            self.__priority = 3
+        return self.__priority
+
     def to_dict(self):
         """
         exports the task to a dictionary for json serialization,
@@ -86,6 +134,7 @@ class Task(QFrame):
         return {
             "name": self.__name_task,
             "subtasks": subtask_dicts,
+            "state": self.__checkbox.isChecked(),
         }
 
     @property

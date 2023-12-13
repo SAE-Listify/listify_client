@@ -2,6 +2,7 @@ from PyQt5.QtWidgets import (
     QWidget,
     QLabel,
     QVBoxLayout,
+    QCheckBox,
 )
 
 
@@ -27,6 +28,19 @@ class Subtask(QWidget):
 
         self.__layout.addWidget(self.__subtask_label)
 
+        # Check box to check if the subtask is done
+        self.__checkbox = QCheckBox("Sous-tâche terminée")
+        self.__checkbox.stateChanged.connect(self.__subtask_label.setDisabled)
+        self.__layout.addWidget(self.__checkbox)
+
+        #Check the subtask state PROVISOIRE
+        if self.__checkbox.isChecked():
+            subtaskstate = True
+        else:
+            subtaskstate = False
+
+
+
     def __str__(self):
         """
         str to print the title of the subtask
@@ -42,6 +56,7 @@ class Subtask(QWidget):
         """
         return {
             "name": self.__name_subtask,
+            "state": self.__checkbox.isChecked(),
         }
 
     @property
