@@ -7,6 +7,7 @@ from PyQt5.QtWidgets import (
     QHBoxLayout,
     QVBoxLayout,
     QScrollArea,
+    QInputDialog,
 )
 from PyQt5.QtCore import Qt
 
@@ -50,9 +51,7 @@ class Project(QWidget):
         self.__scroll_area.setWidget(self.__scrollable_widget)
 
         self.__create_repo_button = QPushButton("Créer un repository")
-        self.__create_repo_button.clicked.connect(
-            lambda: self.create_repository("repo_test")
-        )
+        self.__create_repo_button.clicked.connect(self.__create_repository_popup)
 
         # adding the button and the repos layout to the main project layout
         self.__layout.addWidget(self.__create_repo_button)
@@ -69,13 +68,28 @@ class Project(QWidget):
         """
         return f"{self.__name_project}"
 
+    def __create_repository_popup(self):
+        """
+        Creates the popup to choose a name for new repository
+        :return:
+        """
+        name_repository, ok = QInputDialog.getText(self, 'Nom du repository', 'Entrez le nom du repository:')
+        if not ok:
+            return  # exit if the user cancel
+
+        # Set repo name to a placeholder if user input is empty
+        if name_repository == "":
+            name_repository = "Repertoire"
+
+        self.create_repository(name_repository)
+
     def create_repository(self, name_repository):
         """
         create a repository
         :param name_repository: str
         :return:
         """
-        repo_created = repo.Repository(f"{name_repository}")
+        repo_created = repo.Repository(name_repository)
         self.__repository_list.append(repo_created)  # create the object in the list
         self.__layout_repo.addWidget(repo_created)
 
