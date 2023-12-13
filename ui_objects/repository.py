@@ -46,9 +46,7 @@ class Repository(QFrame):
         self.__layout.addWidget(self.__repo_label)
 
         self.__create_task_button = QPushButton("Créer une tâche")
-        self.__create_task_button.clicked.connect(
-            lambda: self.create_task()
-        )
+        self.__create_task_button.clicked.connect(self.__create_task_popup)
         self.__layout.addWidget(self.__create_task_button)
 
         if self.__task_list:
@@ -62,15 +60,27 @@ class Repository(QFrame):
         """
         return f"{self.__name_rep}"
 
-    def create_task(self, name_task: str = "Tache"):  #
+    def __create_task_popup(self):
+        """
+        Creates the popup to choose a name for new task
+        :return:
+        """
+        name_task, ok = QInputDialog.getText(self, 'Nom de la tache', 'Entrez le nom de la tâche:')
+        if not ok:
+            return  # exit if the user cancel
+
+        # Set task name to a placeholder if user input is empty
+        if name_task == "":
+            name_task = "Tâche"
+
+        self.create_task(name_task)
+
+    def create_task(self, name_task: str = "Tâche"):  #
         """
         create a task with the file task.py
         :param name_task:
         :return:
         """
-        name_task, ok = QInputDialog.getText(self, 'Nom de la tache', 'Entrez le nom de la tache:')
-        if not ok:
-            return  # exit if the user cancel
         created_task = ts.Task(name_task)
         self.__task_list.append(created_task)  # create the object in the list
         self.__layout.addWidget(created_task)
