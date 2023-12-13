@@ -6,7 +6,8 @@ from PyQt5.QtWidgets import (
     QPushButton,
     QVBoxLayout,
     QCheckBox,
-    QComboBox
+    QComboBox,
+    QInputDialog,
 )
 
 
@@ -55,19 +56,10 @@ class Task(QFrame):
         self.__checkbox.stateChanged.connect(self.validate_task)
         self.__layout.addWidget(self.__checkbox)
 
-
-        #priority of the task
-        self.__priority = 0
-        self.__priority_label = QLabel("Priorité : ")
-        self.__priority_list = QComboBox()
-        self.__priority_list.addItem("Basse")
-        self.__priority_list.addItem("Moyenne")
-        self.__priority_list.addItem("Haute")
-        self.__priority_list.addItem("Urgente")
-
-        self.__layout.addWidget(self.__priority_label)
-        self.__layout.addWidget(self.__priority_list)
-
+        # Priority list
+        self.__priority_button = QPushButton(f"Priorité")
+        self.__priority_button.clicked.connect(self.open_priority_window)
+        self.__layout.addWidget(self.__priority_button)
 
     def __str__(self):  # str to print the title in the project
         """
@@ -105,20 +97,24 @@ class Task(QFrame):
         else:
             return False
 
-    def priority_task(self):
+    def open_priority_window(self):
         """
-        return the priority of the task
+        open a window to change the priority of the task
         :return:
         """
-        if self.__priority_list.currentText() == "Basse":
-            self.__priority = 0
-        elif self.__priority_list.currentText() == "Moyenne":
-            self.__priority = 1
-        elif self.__priority_list.currentText() == "Haute":
-            self.__priority = 2
-        elif self.__priority_list.currentText() == "Urgente":
-            self.__priority = 3
-        return self.__priority
+        priority = ["Aucune", "Basse", "Moyenne", "Haute", "Urgente"]
+        item, ok = QInputDialog.getItem(
+            self, "Priorité", "Choisissez la priorité de la tâche", priority, 0, False
+        )
+        if ok and item:
+            self.__priority = item
+            if self.__priority == "Aucune":
+                self.__priority_button.setText(f"Priorité")
+            else:
+                self.__priority_button.setText(f"Priorité : {self.__priority}")
+
+
+
 
     def to_dict(self):
         """
@@ -135,6 +131,7 @@ class Task(QFrame):
             "name": self.__name_task,
             "subtasks": subtask_dicts,
             "state": self.__checkbox.isChecked(),
+            "priority": self.__priority,
         }
 
     @property
