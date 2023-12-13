@@ -5,8 +5,8 @@ from PyQt5.QtWidgets import (
     QLabel,
     QPushButton,
     QVBoxLayout,
+    QHBoxLayout,
     QCheckBox,
-    QComboBox,
     QInputDialog,
 )
 
@@ -61,6 +61,19 @@ class Task(QFrame):
         self.__priority_button.clicked.connect(self.open_priority_window)
         self.__layout.addWidget(self.__priority_button)
 
+        # Rename button
+        self.__rename_button = QPushButton(f"Renommer")
+        self.__rename_button.clicked.connect(self.open_rename_window)
+        self.__layout.addWidget(self.__rename_button)
+
+        # Positioning the buttons
+        self.__button_layout = QHBoxLayout()
+        self.__button_layout.addWidget(self.__priority_button)
+        self.__button_layout.addWidget(self.__rename_button)
+        self.__layout.addLayout(self.__button_layout)
+
+
+
     def __str__(self):  # str to print the title in the project
         """
         return the task's name when printing
@@ -113,6 +126,17 @@ class Task(QFrame):
             else:
                 self.__priority_button.setText(f"Priorité : {self.__priority}")
 
+    def open_rename_window(self):
+        """
+        open a window to rename the task
+        :return:
+        """
+        new_name, ok = QInputDialog.getText(
+            self, "Renommer", "Entrez le nouveau nom de la tâche"
+        )
+        if ok and new_name:
+            self.__name_task = new_name
+            self.__task_label.setText(self.__name_task)
 
 
 
