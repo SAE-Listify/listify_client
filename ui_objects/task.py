@@ -20,7 +20,7 @@ class Task(QFrame):
     Project => Repository => Task => Subtask
     """
 
-    def __init__(self, name_task: str = 'Tache', subtask_list=None):
+    def __init__(self, name_task: str = 'Tache', subtask_list=None, is_done: bool = False):
         """
         create the task's ui elements, passing a subtask is optional
         :param name_task: name of task
@@ -31,6 +31,7 @@ class Task(QFrame):
             subtask_list = []
         self.__name_task = name_task
         self.__subtask_list = subtask_list
+        self.__is_done = is_done
 
         self.setFrameStyle(QFrame.StyledPanel)
 
@@ -40,7 +41,7 @@ class Task(QFrame):
         self.__layout.setAlignment(Qt.AlignTop)
 
         self.__task_label = QLabel(self.__name_task)
-        self.__task_label.setSizePolicy(QSizePolicy.Minimum ,QSizePolicy.Maximum)
+        self.__task_label.setSizePolicy(QSizePolicy.Minimum, QSizePolicy.Maximum)
 
         self.__create_subtask_button = QPushButton("+")
         self.__create_subtask_button.clicked.connect(
@@ -54,7 +55,7 @@ class Task(QFrame):
 
         # Check box to check if the task is done
         self.__checkbox = QCheckBox("")
-        self.__checkbox.stateChanged.connect(self.validate_task)
+        self.__checkbox.stateChanged.connect(self.__on_checkbox_state_changed)
 
         # Priority list
         self.__priority_button = QPushButton("Priorité")
@@ -75,7 +76,7 @@ class Task(QFrame):
         self.__controls_layout.addWidget(self.__rename_button, alignment=Qt.AlignRight)
         self.__controls_layout.addWidget(self.__create_subtask_button, alignment=Qt.AlignRight)
 
-        # Adding elemens to the main layout
+        # Adding elements to the main layout
         self.__layout.addLayout(self.__controls_layout)
 
     def __str__(self):  # str to print the title in the project
@@ -103,17 +104,23 @@ class Task(QFrame):
         """
         del self.__subtask_list[num]
 
-    def validate_task(self):
+    def __on_checkbox_state_changed(self):
         """
         check if the task is done
         :return:
         """
         if self.__checkbox.isChecked():
             self.__task_label.setDisabled(True)
-            return True
+            self.__is_done = True
+            # Set state for all subtask
+            for subtask in self.__subtask_list:
+                subtask.is_done = True
         else:
-            self.__task_label.setDisabled(True)
-            return False
+            self.__task_label.setDisabled(False)
+            self.__is_done = False
+            # set state for all subtask
+            for subtask in self.__subtask_list:
+                subtask.is_done = False
 
     def open_priority_window(self):
         """
@@ -143,8 +150,6 @@ class Task(QFrame):
             self.__name_task = new_name
             self.__task_label.setText(self.__name_task)
 
-
-
     def to_dict(self):
         """
         exports the task to a dictionary for json serialization,
@@ -158,9 +163,9 @@ class Task(QFrame):
 
         return {
             "name": self.__name_task,
-            "subtasks": subtask_dicts,
-            "state": self.__checkbox.isChecked(),
+            "is_done": self.__is_done,
             "priority": self.__priority,
+            "subtasks": subtask_dicts,
         }
 
     @property

@@ -16,13 +16,14 @@ class Subtask(QWidget):
     Project => Repository => Task => Subtask
     """
 
-    def __init__(self, name_subtask: str = 'Sous-Tâche'):
+    def __init__(self, name_subtask: str = 'Sous-Tâche', is_done: bool = False):
         """
         creates the ui elements
         :param name_subtask:
         """
         super().__init__()
         self.__name_subtask = name_subtask
+        self.__is_done = is_done
 
         # creating a widget (to return) and set layout
         self.__layout = QHBoxLayout()
@@ -33,12 +34,9 @@ class Subtask(QWidget):
 
         # Check box to check if the subtask is done
         self.__checkbox = QCheckBox("")
-        self.__checkbox.stateChanged.connect(self.__subtask_label.setDisabled)
-        # Check the subtask state PROVISOIRE
-        if self.__checkbox.isChecked():
-            subtaskstate = True
-        else:
-            subtaskstate = False
+        self.__checkbox.stateChanged.connect(self.__on_checkbox_state_changed)
+        # Check the subtask state
+        self.__checkbox.setChecked(self.__is_done)
 
         # Rename button
         self.__rename_button = QPushButton("Renommer")
@@ -49,13 +47,24 @@ class Subtask(QWidget):
         self.__layout.addWidget(self.__subtask_label)
         self.__layout.addWidget(self.__rename_button, alignment=Qt.AlignRight)
 
-
     def __str__(self):
         """
         str to print the title of the subtask
         :return: str title of the subtask
         """
         return f"{self.__name_subtask}"
+
+    def __on_checkbox_state_changed(self):
+        """
+        Executed on checkbox state change
+        :return:
+        """
+        if self.__checkbox.isChecked():
+            self.__subtask_label.setDisabled(True)
+            self.__is_done = True
+        else:
+            self.__subtask_label.setDisabled(False)
+            self.__is_done = False
 
     def open_rename_window(self):
         """
@@ -96,3 +105,13 @@ class Subtask(QWidget):
         :return:
         """
         self.__name_subtask = name_subtask
+
+    @property
+    def is_done(self):
+        return self.__is_done
+
+    @is_done.setter
+    def is_done(self, is_done):
+        self.__is_done = is_done
+        self.__checkbox.setChecked(is_done)
+        self.__on_checkbox_state_changed()
