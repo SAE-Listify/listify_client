@@ -5,6 +5,7 @@ from PyQt5.QtWidgets import (
     QFrame,
     QPushButton,
     QVBoxLayout,
+    QInputDialog,
 )
 
 from PyQt5.QtCore import (
@@ -54,6 +55,11 @@ class Repository(QFrame):
             for task_widget in self.__task_list:
                 self.__layout.addWidget(task_widget)
 
+        # Rename button
+        self.__rename_button = QPushButton("Renommer")
+        self.__rename_button.clicked.connect(self.open_rename_window)
+        self.__layout.addWidget(self.__rename_button)
+
     def __str__(self):
         """
         str to print the title in the project
@@ -76,6 +82,18 @@ class Repository(QFrame):
         delete the "num"th task
         """
         del self.__task_list[num]
+
+    def open_rename_window(self):
+        """
+        open a window to rename the task
+        :return:
+        """
+        new_name, ok = QInputDialog.getText(
+            self, "Renommer", "Entrez le nouveau nom de la tâche"
+        )
+        if ok and new_name:
+            self.__name_rep = new_name
+            self.__repo_label.setText(self.__name_rep)
 
     def to_dict(self):
         """
