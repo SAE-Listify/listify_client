@@ -86,7 +86,7 @@ class Subtask(QWidget):
         """
         return {
             "name": self.__name_subtask,
-            "state": self.__checkbox.isChecked(),
+            "state": self.__is_done,
         }
 
     @property

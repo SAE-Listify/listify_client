@@ -12,6 +12,7 @@ from PyQt5.QtWidgets import (
 )
 from PyQt5.QtCore import Qt
 
+PRIORITIES = ["Aucune", "Basse", "Moyenne", "Haute", "Urgente"]
 
 class Task(QFrame):
     """
@@ -20,7 +21,7 @@ class Task(QFrame):
     Project => Repository => Task => Subtask
     """
 
-    def __init__(self, name_task: str = 'Tache', subtask_list=None, is_done: bool = False):
+    def __init__(self, name_task: str = 'Tache', subtask_list=None, is_done: bool = False, priority: str = "Aucune"):
         """
         create the task's ui elements, passing a subtask is optional
         :param name_task: name of task
@@ -32,6 +33,10 @@ class Task(QFrame):
         self.__name_task = name_task
         self.__subtask_list = subtask_list
         self.__is_done = is_done
+        if priority in PRIORITIES:
+            self.__priority = priority
+        else:
+            self.__priority = "Aucune"
 
         self.setFrameStyle(QFrame.StyledPanel)
 
@@ -47,7 +52,6 @@ class Task(QFrame):
         self.__create_subtask_button.clicked.connect(
             lambda: self.create_subtask("subtask_test")
         )
-        # self.__create_subtask_button.setSizePolicy(QSizePolicy.Minimum ,QSizePolicy.Maximum)
 
         if self.__subtask_list:
             for subtask_widget in self.__subtask_list:
@@ -60,12 +64,11 @@ class Task(QFrame):
         # Priority list
         self.__priority_button = QPushButton("Priorité")
         self.__priority_button.clicked.connect(self.open_priority_window)
-        # self.__priority_button.setSizePolicy(QSizePolicy.Minimum, QSizePolicy.Minimum)
+        self.__set_priority_button_text() # in case the task is created with a priority
 
         # Rename button
         self.__rename_button = QPushButton("Renommer")
         self.__rename_button.clicked.connect(self.open_rename_window)
-        # self.__rename_button.setSizePolicy(QSizePolicy.Minimum, QSizePolicy.Minimum)
 
         # Creating a HBox for the elements controls
         self.__controls_layout = QHBoxLayout()
@@ -133,10 +136,13 @@ class Task(QFrame):
         )
         if ok and item:
             self.__priority = item
-            if self.__priority == "Aucune":
-                self.__priority_button.setText(f"Priorité")
-            else:
-                self.__priority_button.setText(f"Priorité : {self.__priority}")
+            self.__set_priority_button_text()
+
+    def __set_priority_button_text(self):
+        if self.__priority == "Aucune":
+            self.__priority_button.setText(f"Priorité")
+        else:
+            self.__priority_button.setText(f"Priorité : {self.__priority}")
 
     def open_rename_window(self):
         """
@@ -201,3 +207,11 @@ class Task(QFrame):
         :return:
         """
         self.__subtask_list = subtask_list
+
+    @property
+    def priority(self):
+        """
+        get the prioriry
+        :return: priority of the task
+        """
+        return self.__priority
