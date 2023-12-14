@@ -1,3 +1,5 @@
+import logging
+
 from ui_objects import subtask as sbts
 
 from PyQt5.QtWidgets import (
@@ -125,13 +127,15 @@ class Task(QFrame):
         self.__subtask_list.append(created_subtask)  # create the object in the list
         self.__layout.addWidget(created_subtask)
 
-    def delete_subtask(self, num):
+    def delete_subtask(self, sbts: sbts.Subtask):
         """
         delete the "num"th subtask
         :param num:
         :return:
         """
-        del self.__subtask_list[num]
+        sbts.deleteLater()
+        self.__subtask_list.remove(sbts)
+        logging.debug(f"deleted subtask {sbts} / remaining sbts: {len(self.__subtask_list)}")
 
     def __on_checkbox_state_changed(self):
         """
