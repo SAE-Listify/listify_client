@@ -11,6 +11,7 @@ from PyQt5.QtWidgets import (
     QInputDialog,
 )
 from PyQt5.QtCore import Qt
+from PyQt5.QtGui import QFontMetrics
 
 from ui_objects import subtask as sbts
 
@@ -62,10 +63,6 @@ class Task(QFrame):
 
         self.__layout.addWidget(self.__task_label)
 
-        self.__create_subtask_button = QPushButton("+")
-        self.__create_subtask_button.clicked.connect(self.__create_subtask_popup)
-        self.__layout.addWidget(self.__create_subtask_button)
-
         if self.__subtask_list:
             for subtask_widget in self.__subtask_list:
                 self.__layout.addWidget(subtask_widget)
@@ -83,9 +80,15 @@ class Task(QFrame):
         self.__rename_button = QPushButton("Renommer")
         self.__rename_button.clicked.connect(self.open_rename_window)
 
+        # Create button
+        self.__create_subtask_button = QPushButton("+")
+        self.__create_subtask_button.clicked.connect(self.__create_subtask_popup)
+        self.__create_subtask_button.setFixedWidth(30)
+
         # Delete button
         self.__delete_button = QPushButton("X")
         self.__delete_button.clicked.connect(self.__delete_self)
+        self.__delete_button.setFixedWidth(30)
 
         # Creating a HBox for the elements controls
         self.__controls_layout = QHBoxLayout()

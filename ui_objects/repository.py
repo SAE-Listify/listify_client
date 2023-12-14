@@ -52,17 +52,19 @@ class Repository(QFrame):
 
         self.__repo_label = QLabel(self.__name_rep)
 
-        self.__create_task_button = QPushButton("+")
-        self.__create_task_button.clicked.connect(self.__create_task_popup)
-        self.__layout.addWidget(self.__create_task_button)
-
         # Rename button
         self.__rename_button = QPushButton("Renommer")
         self.__rename_button.clicked.connect(self.open_rename_window)
 
+        # Create task button
+        self.__create_task_button = QPushButton("+")
+        self.__create_task_button.clicked.connect(self.__create_task_popup)
+        self.__create_task_button.setFixedWidth(30)
+
         # Delete button
         self.__delete_button = QPushButton("X")
         self.__delete_button.clicked.connect(self.__delete_self)
+        self.__delete_button.setFixedWidth(30)
 
         # HBox for controls
         self.__controls_layout = QHBoxLayout()

@@ -48,14 +48,16 @@ class Subtask(QWidget):
         self.__rename_button = QPushButton("Renommer")
         self.__rename_button.clicked.connect(self.open_rename_window)
 
-        # Rename button
-        self.__rename_button = QPushButton("X")
-        self.__rename_button.clicked.connect(self.__delete_self)
+        # Delete button
+        self.__delete_button = QPushButton("X")
+        self.__delete_button.clicked.connect(self.__delete_self)
+        self.__delete_button.setFixedWidth(30)
 
         # Adding widgets to the layout
         self.__layout.addWidget(self.__checkbox)
         self.__layout.addWidget(self.__subtask_label)
         self.__layout.addWidget(self.__rename_button, alignment=Qt.AlignRight)
+        self.__layout.addWidget(self.__delete_button, alignment=Qt.AlignRight)
 
     def __str__(self):
         """
