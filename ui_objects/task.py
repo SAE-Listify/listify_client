@@ -215,3 +215,24 @@ class Task(QFrame):
         :return: priority of the task
         """
         return self.__priority
+
+    @property
+    def is_done(self) -> bool:
+        """
+        get the state of the task
+        :return: is_done: bool
+        """
+        return self.__is_done
+
+    @is_done.setter
+    def is_done(self, is_done: bool):
+        """
+        set the state of the task
+        :param is_done: bool
+        :return:
+        """
+        self.__task_label.setDisabled(is_done)
+        self.__is_done = is_done
+        # Set state for all subtask
+        for subtask in self.__subtask_list:
+            subtask.is_done = is_done
