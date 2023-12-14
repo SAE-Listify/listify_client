@@ -50,7 +50,6 @@ class Task(QFrame):
             for subtask_widget in self.__subtask_list:
                 self.__layout.addWidget(subtask_widget)
 
-
         # Check box to check if the task is done
         self.__checkbox = QCheckBox("Tâche terminée")
         self.__checkbox.stateChanged.connect(self.validate_task)
@@ -66,13 +65,17 @@ class Task(QFrame):
         self.__rename_button.clicked.connect(self.open_rename_window)
         self.__layout.addWidget(self.__rename_button)
 
+        # Delete button
+        # self.__delete_button = QPushButton(f"Supprimer")
+        # self.__delete_button.clicked.connect(self.delete_task)
+        # self.__layout.addWidget(self.__delete_button)
+
         # Positioning the buttons
         self.__button_layout = QHBoxLayout()
         self.__button_layout.addWidget(self.__priority_button)
         self.__button_layout.addWidget(self.__rename_button)
+        # self.__button_layout.addWidget(self.__delete_button)
         self.__layout.addLayout(self.__button_layout)
-
-
 
     def __str__(self):  # str to print the title in the project
         """
@@ -137,8 +140,6 @@ class Task(QFrame):
         if ok and new_name:
             self.__name_task = new_name
             self.__task_label.setText(self.__name_task)
-
-
 
     def to_dict(self):
         """
