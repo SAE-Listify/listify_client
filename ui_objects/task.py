@@ -1,5 +1,4 @@
-from . import subtask as sbts
-
+import logging
 from PyQt5.QtWidgets import (
     QFrame,
     QLabel,
@@ -12,8 +11,13 @@ from PyQt5.QtWidgets import (
     QInputDialog,
 )
 from PyQt5.QtCore import Qt
+from PyQt5.QtGui import QFontMetrics
+
+from ui_objects import subtask as sbts
+
 
 PRIORITIES = ["Aucune", "Basse", "Moyenne", "Haute", "Urgente"]
+
 
 class Task(QFrame):
     """
@@ -22,13 +26,21 @@ class Task(QFrame):
     Project => Repository => Task => Subtask
     """
 
-    def __init__(self, name_task: str = 'Tache', subtask_list=None, is_done: bool = False, priority: str = "Aucune"):
+    def __init__(
+            self,
+            parent,
+            name_task: str = 'Tache',
+            subtask_list: list = None,
+            is_done: bool = False,
+            priority: str = "Aucune"
+    ):
         """
         create the task's ui elements, passing a subtask is optional
         :param name_task: name of task
         :param subtask_list: list of subtask
         """
         super().__init__()
+        self.__parent = parent
         if subtask_list is None:  # creation of an empty list if none is given
             subtask_list = []
         self.__name_task = name_task
@@ -51,10 +63,6 @@ class Task(QFrame):
 
         self.__layout.addWidget(self.__task_label)
 
-        self.__create_subtask_button = QPushButton("+")
-        self.__create_subtask_button.clicked.connect(self.__create_subtask_popup)
-        self.__layout.addWidget(self.__create_subtask_button)
-
         if self.__subtask_list:
             for subtask_widget in self.__subtask_list:
                 self.__layout.addWidget(subtask_widget)
@@ -66,11 +74,21 @@ class Task(QFrame):
         # Priority list
         self.__priority_button = QPushButton("Priorité")
         self.__priority_button.clicked.connect(self.open_priority_window)
-        self.__set_priority_button_text() # in case the task is created with a priority
+        self.__set_priority_button_text()  # in case the task is created with a priority
 
         # Rename button
         self.__rename_button = QPushButton("Renommer")
         self.__rename_button.clicked.connect(self.open_rename_window)
+
+        # Create button
+        self.__create_subtask_button = QPushButton("+")
+        self.__create_subtask_button.clicked.connect(self.__create_subtask_popup)
+        self.__create_subtask_button.setFixedWidth(30)
+
+        # Delete button
+        self.__delete_button = QPushButton("X")
+        self.__delete_button.clicked.connect(self.__delete_self)
+        self.__delete_button.setFixedWidth(30)
 
         # Creating a HBox for the elements controls
         self.__controls_layout = QHBoxLayout()
@@ -80,6 +98,7 @@ class Task(QFrame):
         self.__controls_layout.addWidget(self.__priority_button, alignment=Qt.AlignRight)
         self.__controls_layout.addWidget(self.__rename_button, alignment=Qt.AlignRight)
         self.__controls_layout.addWidget(self.__create_subtask_button, alignment=Qt.AlignRight)
+        self.__controls_layout.addWidget(self.__delete_button, alignment=Qt.AlignRight)
 
         # Adding elements to the main layout
         self.__layout.addLayout(self.__controls_layout)
@@ -106,23 +125,28 @@ class Task(QFrame):
 
         self.create_subtask(name_subtask)
 
+    def __delete_self(self):
+        self.__parent.delete_task(self)
+
     def create_subtask(self, name_subtask: str = "Sous-tâche"):
         """
         create a subtask with a name
         :param name_subtask: str
         :return:
         """
-        created_subtask = sbts.Subtask(name_subtask)
+        created_subtask = sbts.Subtask(self, name_subtask)
         self.__subtask_list.append(created_subtask)  # create the object in the list
         self.__layout.addWidget(created_subtask)
 
-    def delete_subtask(self, num):
+    def delete_subtask(self, sbts: sbts.Subtask):
         """
         delete the "num"th subtask
         :param num:
         :return:
         """
-        del self.__subtask_list[num]
+        sbts.deleteLater()
+        self.__subtask_list.remove(sbts)
+        logging.debug(f"deleted subtask {sbts} / remaining sbts: {len(self.__subtask_list)}")
 
     def __on_checkbox_state_changed(self):
         """

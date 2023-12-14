@@ -1,5 +1,4 @@
-from . import repository as repo
-
+import logging
 from PyQt5.QtWidgets import (
     QWidget,
     QLabel,
@@ -11,6 +10,7 @@ from PyQt5.QtWidgets import (
 )
 from PyQt5.QtCore import Qt
 
+from ui_objects import repository as repo
 
 class Project(QWidget):
     """
@@ -89,17 +89,19 @@ class Project(QWidget):
         :param name_repository: str
         :return:
         """
-        repo_created = repo.Repository(name_repository)
+        repo_created = repo.Repository(self, name_repository)
         self.__repository_list.append(repo_created)  # create the object in the list
         self.__layout_repo.addWidget(repo_created)
 
-    def delete_repository(self, num: int):
+    def delete_repository(self, rep: repo.Repository):
         """
-        delete the "num"th repository from the project
-        :param num:
+        delete the repository given as arg from the project
+        :param rep: the repository object
         :return:
         """
-        del self.__repository_list[num]
+        rep.deleteLater()
+        self.__repository_list.remove(rep)
+        logging.debug(f"Deleted repository {rep} / Remaining repositories: {len(self.__repository_list)}")
 
     def to_dict(self):
         """

@@ -16,12 +16,18 @@ class Subtask(QWidget):
     Project => Repository => Task => Subtask
     """
 
-    def __init__(self, name_subtask: str = 'Sous-Tâche', is_done: bool = False):
+    def __init__(
+            self,
+            parent,
+            name_subtask: str = 'Sous-Tâche',
+            is_done: bool = False
+    ):
         """
         creates the ui elements
         :param name_subtask:
         """
         super().__init__()
+        self.__parent = parent
         self.__name_subtask = name_subtask
         self.__is_done = is_done
 
@@ -42,10 +48,16 @@ class Subtask(QWidget):
         self.__rename_button = QPushButton("Renommer")
         self.__rename_button.clicked.connect(self.open_rename_window)
 
+        # Delete button
+        self.__delete_button = QPushButton("X")
+        self.__delete_button.clicked.connect(self.__delete_self)
+        self.__delete_button.setFixedWidth(30)
+
         # Adding widgets to the layout
         self.__layout.addWidget(self.__checkbox)
         self.__layout.addWidget(self.__subtask_label)
         self.__layout.addWidget(self.__rename_button, alignment=Qt.AlignRight)
+        self.__layout.addWidget(self.__delete_button, alignment=Qt.AlignRight)
 
     def __str__(self):
         """
@@ -77,6 +89,9 @@ class Subtask(QWidget):
         if ok and new_name:
             self.__name_subtask = new_name
             self.__subtask_label.setText(self.__name_subtask)
+
+    def __delete_self(self):
+        self.__parent.delete_subtask(self)
 
     def to_dict(self):
         """

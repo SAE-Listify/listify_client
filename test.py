@@ -21,7 +21,7 @@ def test_repository_initialization(test_app):
     :param test_app:
     :return:
     """
-    repository = Repository()
+    repository = Repository(Project())
     assert repository.name_rep == "Repertoire"
     assert repository.task_list == []
 
@@ -32,7 +32,7 @@ def test_repository_add_task(test_app):
     :param test_app:
     :return:
     """
-    repository = Repository()
+    repository = Repository(Project())
     repository.create_task("Test Task")
     assert len(repository.task_list) == 1
     assert repository.task_list[0].name_task == "Test Task"
@@ -45,7 +45,7 @@ def test_task_initialization(test_app):
     :param test_app:
     :return:
     """
-    task = ts()
+    task = ts(Repository(Project()))
     assert task.name_task == "Tache"
     assert task.subtask_list == []
 
@@ -57,7 +57,7 @@ def test_task_create_subtask(test_app):
     :param test_app:
     :return:
     """
-    task = ts()
+    task = ts(Repository(Project()))
     task.create_subtask("Subtask 1")
     assert len(task.subtask_list) == 1
     assert task.subtask_list[0].name_subtask == "Subtask 1"

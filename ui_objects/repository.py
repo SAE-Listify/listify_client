@@ -1,5 +1,4 @@
-from . import task as ts
-
+import logging
 from PyQt5.QtWidgets import (
     QLabel,
     QFrame,
@@ -14,21 +13,30 @@ from PyQt5.QtCore import (
     Qt,
 )
 
+from ui_objects import task as ts
+
 
 class Repository(QFrame):
+
     """
     Repository
 
     Project => Repository => Task => Subtask
     """
 
-    def __init__(self, name_rep: str = "Repertoire", task_list=None):
+    def __init__(
+            self,
+            parent,
+            name_rep: str = "Repertoire",
+            task_list: list = None
+    ):
         """
         creates the ui elements, passing a task list is optional
         :param name_rep: str
         :param task_list: list of tasks
         """
         super().__init__()
+        self.__parent = parent
         if task_list is None:  # create an empty list if none is given
             task_list = []
         self.__name_rep = name_rep
@@ -44,19 +52,26 @@ class Repository(QFrame):
 
         self.__repo_label = QLabel(self.__name_rep)
 
-        self.__create_task_button = QPushButton("+")
-        self.__create_task_button.clicked.connect(self.__create_task_popup)
-        self.__layout.addWidget(self.__create_task_button)
-
         # Rename button
         self.__rename_button = QPushButton("Renommer")
         self.__rename_button.clicked.connect(self.open_rename_window)
+
+        # Create task button
+        self.__create_task_button = QPushButton("+")
+        self.__create_task_button.clicked.connect(self.__create_task_popup)
+        self.__create_task_button.setFixedWidth(30)
+
+        # Delete button
+        self.__delete_button = QPushButton("X")
+        self.__delete_button.clicked.connect(self.__delete_self)
+        self.__delete_button.setFixedWidth(30)
 
         # HBox for controls
         self.__controls_layout = QHBoxLayout()
         self.__controls_layout.addWidget(self.__repo_label)
         self.__controls_layout.addWidget(self.__rename_button)
         self.__controls_layout.addWidget(self.__create_task_button)
+        self.__controls_layout.addWidget(self.__delete_button)
 
         # Adding controls to the layout
         self.__layout.addLayout(self.__controls_layout)
@@ -88,21 +103,26 @@ class Repository(QFrame):
 
         self.create_task(name_task)
 
+    def __delete_self(self):
+        self.__parent.delete_repository(self)
+
     def create_task(self, name_task: str = "Tâche"):  #
         """
         create a task with the file task.py
         :param name_task:
         :return:
         """
-        created_task = ts.Task(name_task)
+        created_task = ts.Task(self, name_task)
         self.__task_list.append(created_task)  # create the object in the list
         self.__layout.addWidget(created_task)
 
-    def delete_task(self, num: int):
+    def delete_task(self, task: ts.Task):
         """
-        delete the "num"th task
+        delete the task given as argument
         """
-        del self.__task_list[num]
+        task.deleteLater()
+        self.__task_list.remove(task)
+        logging.debug(f"Deleted task {task} / Remaining tasks: {len(self.__task_list)}")
 
     def open_rename_window(self):
         """
