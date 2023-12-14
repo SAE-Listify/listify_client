@@ -9,6 +9,7 @@ from PyQt5.QtWidgets import (
     QCheckBox,
     QInputDialog,
     QSizePolicy,
+    QInputDialog,
 )
 from PyQt5.QtCore import Qt
 
@@ -48,10 +49,11 @@ class Task(QFrame):
         self.__task_label = QLabel(self.__name_task)
         self.__task_label.setSizePolicy(QSizePolicy.Minimum, QSizePolicy.Maximum)
 
+        self.__layout.addWidget(self.__task_label)
+
         self.__create_subtask_button = QPushButton("+")
-        self.__create_subtask_button.clicked.connect(
-            lambda: self.create_subtask("subtask_test")
-        )
+        self.__create_subtask_button.clicked.connect(self.__create_subtask_popup)
+        self.__layout.addWidget(self.__create_subtask_button)
 
         if self.__subtask_list:
             for subtask_widget in self.__subtask_list:
@@ -89,7 +91,22 @@ class Task(QFrame):
         """
         return f"{self.__name_task}"
 
-    def create_subtask(self, name_subtask: str = "Sous tache"):
+    def __create_subtask_popup(self):
+        name_subtask, ok = QInputDialog.getText(
+            self,
+            'Nom du repository',
+            'Entrez le nom de la sous-tâche:'
+        )
+        if not ok:
+            return  # exit if the user cancel
+
+        # Set name to a placeholder if user input is empty
+        if name_subtask == "":
+            name_subtask = "Sous-Tâche"
+
+        self.create_subtask(name_subtask)
+
+    def create_subtask(self, name_subtask: str = "Sous-tâche"):
         """
         create a subtask with a name
         :param name_subtask: str
