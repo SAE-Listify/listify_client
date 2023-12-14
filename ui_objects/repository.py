@@ -5,7 +5,7 @@ from PyQt5.QtWidgets import (
     QFrame,
     QPushButton,
     QVBoxLayout,
-    QInputDialog,
+    QInputDialog, QHBoxLayout,
 )
 
 from PyQt5.QtCore import (
@@ -41,24 +41,29 @@ class Repository(QFrame):
         self.setLayout(self.__layout)
 
         self.__repo_label = QLabel(self.__name_rep)
-        # TOD : Change name of repo on dbl click
-        # self.__repo_label.mouseDoubleClickEvent()
-        self.__layout.addWidget(self.__repo_label)
 
-        self.__create_task_button = QPushButton("Créer une tâche")
+        self.__create_task_button = QPushButton("+")
         self.__create_task_button.clicked.connect(
             lambda: self.create_task("task_test")
         )
-        self.__layout.addWidget(self.__create_task_button)
-
-        if self.__task_list:
-            for task_widget in self.__task_list:
-                self.__layout.addWidget(task_widget)
 
         # Rename button
         self.__rename_button = QPushButton("Renommer")
         self.__rename_button.clicked.connect(self.open_rename_window)
-        self.__layout.addWidget(self.__rename_button)
+
+        # HBox for controls
+        self.__controls_layout = QHBoxLayout()
+        self.__controls_layout.addWidget(self.__repo_label)
+        self.__controls_layout.addWidget(self.__rename_button)
+        self.__controls_layout.addWidget(self.__create_task_button)
+
+        # Adding controls to the layout
+        self.__layout.addLayout(self.__controls_layout)
+
+        # Add tasks to the layout
+        if self.__task_list:
+            for task_widget in self.__task_list:
+                self.__layout.addWidget(task_widget)
 
     def __str__(self):
         """

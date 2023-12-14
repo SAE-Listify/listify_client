@@ -62,7 +62,7 @@ class Task(QFrame):
         # self.__priority_button.setSizePolicy(QSizePolicy.Minimum, QSizePolicy.Minimum)
 
         # Rename button
-        self.__rename_button = QPushButton("R")
+        self.__rename_button = QPushButton("Renommer")
         self.__rename_button.clicked.connect(self.open_rename_window)
         # self.__rename_button.setSizePolicy(QSizePolicy.Minimum, QSizePolicy.Minimum)
 

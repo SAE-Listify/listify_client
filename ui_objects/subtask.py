@@ -34,11 +34,6 @@ class Subtask(QWidget):
         # Check box to check if the subtask is done
         self.__checkbox = QCheckBox("")
         self.__checkbox.stateChanged.connect(self.__subtask_label.setDisabled)
-
-        # Adding widgets to the layout
-        self.__layout.addWidget(self.__checkbox)
-        self.__layout.addWidget(self.__subtask_label)
-
         # Check the subtask state PROVISOIRE
         if self.__checkbox.isChecked():
             subtaskstate = True
@@ -48,7 +43,12 @@ class Subtask(QWidget):
         # Rename button
         self.__rename_button = QPushButton("Renommer")
         self.__rename_button.clicked.connect(self.open_rename_window)
-        self.__layout.addWidget(self.__rename_button)
+
+        # Adding widgets to the layout
+        self.__layout.addWidget(self.__checkbox)
+        self.__layout.addWidget(self.__subtask_label)
+        self.__layout.addWidget(self.__rename_button, alignment=Qt.AlignRight)
+
 
     def __str__(self):
         """
