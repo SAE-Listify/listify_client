@@ -1,9 +1,10 @@
 from PyQt5.QtWidgets import (
     QWidget,
     QLabel,
-    QVBoxLayout,
+    QHBoxLayout,
     QCheckBox,
 )
+from PyQt5.QtCore import Qt
 
 
 class Subtask(QWidget):
@@ -22,16 +23,19 @@ class Subtask(QWidget):
         self.__name_subtask = name_subtask
 
         # creating a widget (to return) and set layout
-        self.__layout = QVBoxLayout()
+        self.__layout = QHBoxLayout()
+        self.__layout.setAlignment(Qt.AlignLeft)
         self.setLayout(self.__layout)
+
         self.__subtask_label = QLabel(self.__name_subtask)
 
-        self.__layout.addWidget(self.__subtask_label)
-
         # Check box to check if the subtask is done
-        self.__checkbox = QCheckBox("Sous-tâche terminée")
+        self.__checkbox = QCheckBox("")
         self.__checkbox.stateChanged.connect(self.__subtask_label.setDisabled)
+
+        # Adding widgets to the layout
         self.__layout.addWidget(self.__checkbox)
+        self.__layout.addWidget(self.__subtask_label)
 
         #Check the subtask state PROVISOIRE
         if self.__checkbox.isChecked():

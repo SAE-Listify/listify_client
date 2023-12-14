@@ -8,7 +8,9 @@ from PyQt5.QtWidgets import (
     QHBoxLayout,
     QCheckBox,
     QInputDialog,
+    QSizePolicy,
 )
+from PyQt5.QtCore import Qt
 
 
 class Task(QFrame):
@@ -35,44 +37,46 @@ class Task(QFrame):
         # creating a widget and set layout
         self.__layout = QVBoxLayout()
         self.setLayout(self.__layout)
+        self.__layout.setAlignment(Qt.AlignTop)
 
         self.__task_label = QLabel(self.__name_task)
+        self.__task_label.setSizePolicy(QSizePolicy.Minimum ,QSizePolicy.Maximum)
 
-        self.__layout.addWidget(self.__task_label)
-
-        self.__create_subtask_button = QPushButton("Créer une sous-tâche")
+        self.__create_subtask_button = QPushButton("+")
         self.__create_subtask_button.clicked.connect(
             lambda: self.create_subtask("subtask_test")
         )
-        self.__layout.addWidget(self.__create_subtask_button)
+        # self.__create_subtask_button.setSizePolicy(QSizePolicy.Minimum ,QSizePolicy.Maximum)
 
         if self.__subtask_list:
             for subtask_widget in self.__subtask_list:
                 self.__layout.addWidget(subtask_widget)
 
-
         # Check box to check if the task is done
-        self.__checkbox = QCheckBox("Tâche terminée")
+        self.__checkbox = QCheckBox("")
         self.__checkbox.stateChanged.connect(self.validate_task)
-        self.__layout.addWidget(self.__checkbox)
 
         # Priority list
-        self.__priority_button = QPushButton(f"Priorité")
+        self.__priority_button = QPushButton("Priorité")
         self.__priority_button.clicked.connect(self.open_priority_window)
-        self.__layout.addWidget(self.__priority_button)
+        # self.__priority_button.setSizePolicy(QSizePolicy.Minimum, QSizePolicy.Minimum)
 
         # Rename button
-        self.__rename_button = QPushButton(f"Renommer")
+        self.__rename_button = QPushButton("R")
         self.__rename_button.clicked.connect(self.open_rename_window)
-        self.__layout.addWidget(self.__rename_button)
+        # self.__rename_button.setSizePolicy(QSizePolicy.Minimum, QSizePolicy.Minimum)
 
-        # Positioning the buttons
-        self.__button_layout = QHBoxLayout()
-        self.__button_layout.addWidget(self.__priority_button)
-        self.__button_layout.addWidget(self.__rename_button)
-        self.__layout.addLayout(self.__button_layout)
+        # Creating a HBox for the elements controls
+        self.__controls_layout = QHBoxLayout()
+        # Adding Widgets to the HBox
+        self.__controls_layout.addWidget(self.__checkbox, alignment=Qt.AlignLeft)
+        self.__controls_layout.addWidget(self.__task_label, stretch=1, alignment=Qt.AlignLeft)
+        self.__controls_layout.addWidget(self.__priority_button, alignment=Qt.AlignRight)
+        self.__controls_layout.addWidget(self.__rename_button, alignment=Qt.AlignRight)
+        self.__controls_layout.addWidget(self.__create_subtask_button, alignment=Qt.AlignRight)
 
-
+        # Adding elemens to the main layout
+        self.__layout.addLayout(self.__controls_layout)
 
     def __str__(self):  # str to print the title in the project
         """
@@ -108,6 +112,7 @@ class Task(QFrame):
             self.__task_label.setDisabled(True)
             return True
         else:
+            self.__task_label.setDisabled(True)
             return False
 
     def open_priority_window(self):
