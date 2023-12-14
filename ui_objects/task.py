@@ -1,4 +1,4 @@
-from . import subtask as sbts
+from ui_objects import subtask as sbts
 
 from PyQt5.QtWidgets import (
     QFrame,
@@ -15,6 +15,7 @@ from PyQt5.QtCore import Qt
 
 PRIORITIES = ["Aucune", "Basse", "Moyenne", "Haute", "Urgente"]
 
+
 class Task(QFrame):
     """
     Task
@@ -22,13 +23,21 @@ class Task(QFrame):
     Project => Repository => Task => Subtask
     """
 
-    def __init__(self, name_task: str = 'Tache', subtask_list=None, is_done: bool = False, priority: str = "Aucune"):
+    def __init__(
+            self,
+            parent,
+            name_task: str = 'Tache',
+            subtask_list: list = None,
+            is_done: bool = False,
+            priority: str = "Aucune"
+    ):
         """
         create the task's ui elements, passing a subtask is optional
         :param name_task: name of task
         :param subtask_list: list of subtask
         """
         super().__init__()
+        self.__parent = parent
         if subtask_list is None:  # creation of an empty list if none is given
             subtask_list = []
         self.__name_task = name_task
@@ -66,7 +75,7 @@ class Task(QFrame):
         # Priority list
         self.__priority_button = QPushButton("Priorité")
         self.__priority_button.clicked.connect(self.open_priority_window)
-        self.__set_priority_button_text() # in case the task is created with a priority
+        self.__set_priority_button_text()  # in case the task is created with a priority
 
         # Rename button
         self.__rename_button = QPushButton("Renommer")
@@ -112,7 +121,7 @@ class Task(QFrame):
         :param name_subtask: str
         :return:
         """
-        created_subtask = sbts.Subtask(name_subtask)
+        created_subtask = sbts.Subtask(self, name_subtask)
         self.__subtask_list.append(created_subtask)  # create the object in the list
         self.__layout.addWidget(created_subtask)
 

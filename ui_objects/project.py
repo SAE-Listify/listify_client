@@ -89,7 +89,7 @@ class Project(QWidget):
         :param name_repository: str
         :return:
         """
-        repo_created = repo.Repository(name_repository)
+        repo_created = repo.Repository(self, name_repository)
         self.__repository_list.append(repo_created)  # create the object in the list
         self.__layout_repo.addWidget(repo_created)
 

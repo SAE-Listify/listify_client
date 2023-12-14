@@ -1,4 +1,4 @@
-from . import task as ts
+from ui_objects import task as ts
 
 from PyQt5.QtWidgets import (
     QLabel,
@@ -22,13 +22,19 @@ class Repository(QFrame):
     Project => Repository => Task => Subtask
     """
 
-    def __init__(self, name_rep: str = "Repertoire", task_list=None):
+    def __init__(
+            self,
+            parent,
+            name_rep: str = "Repertoire",
+            task_list: list = None
+    ):
         """
         creates the ui elements, passing a task list is optional
         :param name_rep: str
         :param task_list: list of tasks
         """
         super().__init__()
+        self.__parent = parent
         if task_list is None:  # create an empty list if none is given
             task_list = []
         self.__name_rep = name_rep
@@ -94,7 +100,7 @@ class Repository(QFrame):
         :param name_task:
         :return:
         """
-        created_task = ts.Task(name_task)
+        created_task = ts.Task(self, name_task)
         self.__task_list.append(created_task)  # create the object in the list
         self.__layout.addWidget(created_task)
 
