@@ -73,7 +73,13 @@ def test_project_to_dict(test_app):
     project = Project("TheProject")
     project.create_repository("Repo1")
     project.repository_list[0].create_task("Task1")
+    project.repository_list[0].create_task("Task2")
     project.repository_list[0].task_list[0].create_subtask("Subtask1")
+    project.repository_list[0].task_list[0].create_subtask("Subtask2")
+    project.repository_list[0].task_list[0].is_done = True
+
+    project.repository_list[0].task_list[1].create_subtask("Subtask1")
+    project.repository_list[0].task_list[1].subtask_list[0].is_done = True
 
     expected_dict = {
         "name_project": "TheProject",
@@ -83,8 +89,19 @@ def test_project_to_dict(test_app):
                 "tasks": [
                     {
                         "name": "Task1",
+                        "is_done": True,
+                        "priority": "Aucune",
                         "subtasks": [
-                            {"name": "Subtask1"}
+                            {"name": "Subtask1", "is_done": True},
+                            {"name": "Subtask2", "is_done": True},
+                        ]
+                    },
+                    {
+                        "name": "Task2",
+                        "is_done": False,
+                        "priority": "Aucune",
+                        "subtasks": [
+                            {"name": "Subtask1", "is_done": True},
                         ]
                     }
                 ]

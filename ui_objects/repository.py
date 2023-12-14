@@ -6,6 +6,8 @@ from PyQt5.QtWidgets import (
     QPushButton,
     QVBoxLayout,
     QInputDialog,
+    QHBoxLayout,
+    QInputDialog,
 )
 
 from PyQt5.QtCore import (
@@ -41,14 +43,25 @@ class Repository(QFrame):
         self.setLayout(self.__layout)
 
         self.__repo_label = QLabel(self.__name_rep)
-        # TOD : Change name of repo on dbl click
-        # self.__repo_label.mouseDoubleClickEvent()
-        self.__layout.addWidget(self.__repo_label)
 
-        self.__create_task_button = QPushButton("Créer une tâche")
+        self.__create_task_button = QPushButton("+")
         self.__create_task_button.clicked.connect(self.__create_task_popup)
         self.__layout.addWidget(self.__create_task_button)
 
+        # Rename button
+        self.__rename_button = QPushButton("Renommer")
+        self.__rename_button.clicked.connect(self.open_rename_window)
+
+        # HBox for controls
+        self.__controls_layout = QHBoxLayout()
+        self.__controls_layout.addWidget(self.__repo_label)
+        self.__controls_layout.addWidget(self.__rename_button)
+        self.__controls_layout.addWidget(self.__create_task_button)
+
+        # Adding controls to the layout
+        self.__layout.addLayout(self.__controls_layout)
+
+        # Add tasks to the layout
         if self.__task_list:
             for task_widget in self.__task_list:
                 self.__layout.addWidget(task_widget)
@@ -90,6 +103,18 @@ class Repository(QFrame):
         delete the "num"th task
         """
         del self.__task_list[num]
+
+    def open_rename_window(self):
+        """
+        open a window to rename the task
+        :return:
+        """
+        new_name, ok = QInputDialog.getText(
+            self, "Renommer", "Entrez le nouveau nom de la tâche"
+        )
+        if ok and new_name:
+            self.__name_rep = new_name
+            self.__repo_label.setText(self.__name_rep)
 
     def to_dict(self):
         """
