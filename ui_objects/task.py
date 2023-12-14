@@ -1,7 +1,4 @@
 import logging
-
-from ui_objects import subtask as sbts
-
 from PyQt5.QtWidgets import (
     QFrame,
     QLabel,
@@ -14,6 +11,9 @@ from PyQt5.QtWidgets import (
     QInputDialog,
 )
 from PyQt5.QtCore import Qt
+
+from ui_objects import subtask as sbts
+
 
 PRIORITIES = ["Aucune", "Basse", "Moyenne", "Haute", "Urgente"]
 

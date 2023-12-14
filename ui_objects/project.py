@@ -1,5 +1,4 @@
-from . import repository as repo
-
+import logging
 from PyQt5.QtWidgets import (
     QWidget,
     QLabel,
@@ -11,6 +10,7 @@ from PyQt5.QtWidgets import (
 )
 from PyQt5.QtCore import Qt
 
+from ui_objects import repository as repo
 
 class Project(QWidget):
     """
@@ -53,10 +53,6 @@ class Project(QWidget):
         self.__create_repo_button = QPushButton("Créer un repository")
         self.__create_repo_button.clicked.connect(self.__create_repository_popup)
 
-        # Delete button for the repository
-        self._delete_button = QPushButton("X")
-        self._delete_button.clicked.connect(self.delete_repository)
-
         # adding the button and the repos layout to the main project layout
         self.__layout.addWidget(self.__create_repo_button)
         self.__layout.addWidget(self.__scroll_area)
@@ -97,17 +93,15 @@ class Project(QWidget):
         self.__repository_list.append(repo_created)  # create the object in the list
         self.__layout_repo.addWidget(repo_created)
 
-    def delete_repository(self, num: int):
+    def delete_repository(self, rep: repo.Repository):
         """
-        delete the "num"th repository from the project
-        :param num:
+        delete the repository given as arg from the project
+        :param rep: the repository object
         :return:
         """
-        if 0 <= num < len(self.__repository_list):
-            repo = self.__repository_list[num]
-            repo.deleteLater()
-            del self.__repository_list[num]
-            logging.debug(f"Deleted repository {repo} / Remaining repositories: {len(self.__repository_list)}")
+        rep.deleteLater()
+        self.__repository_list.remove(rep)
+        logging.debug(f"Deleted repository {rep} / Remaining repositories: {len(self.__repository_list)}")
 
     def to_dict(self):
         """

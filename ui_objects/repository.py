@@ -1,5 +1,4 @@
-from ui_objects import task as ts
-
+import logging
 from PyQt5.QtWidgets import (
     QLabel,
     QFrame,
@@ -14,8 +13,11 @@ from PyQt5.QtCore import (
     Qt,
 )
 
+from ui_objects import task as ts
+
 
 class Repository(QFrame):
+
     """
     Repository
 
@@ -58,11 +60,16 @@ class Repository(QFrame):
         self.__rename_button = QPushButton("Renommer")
         self.__rename_button.clicked.connect(self.open_rename_window)
 
+        # Delete button
+        self.__delete_button = QPushButton("X")
+        self.__delete_button.clicked.connect(self.__delete_self)
+
         # HBox for controls
         self.__controls_layout = QHBoxLayout()
         self.__controls_layout.addWidget(self.__repo_label)
         self.__controls_layout.addWidget(self.__rename_button)
         self.__controls_layout.addWidget(self.__create_task_button)
+        self.__controls_layout.addWidget(self.__delete_button)
 
         # Adding controls to the layout
         self.__layout.addLayout(self.__controls_layout)
@@ -93,6 +100,9 @@ class Repository(QFrame):
             name_task = "Tâche"
 
         self.create_task(name_task)
+
+    def __delete_self(self):
+        self.__parent.delete_repository(self)
 
     def create_task(self, name_task: str = "Tâche"):  #
         """

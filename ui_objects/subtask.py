@@ -50,7 +50,7 @@ class Subtask(QWidget):
 
         # Rename button
         self.__rename_button = QPushButton("X")
-        self.__rename_button.clicked.connect(self.__delete_subtask)
+        self.__rename_button.clicked.connect(self.__delete_self)
 
         # Adding widgets to the layout
         self.__layout.addWidget(self.__checkbox)
@@ -88,7 +88,7 @@ class Subtask(QWidget):
             self.__name_subtask = new_name
             self.__subtask_label.setText(self.__name_subtask)
 
-    def __delete_subtask(self):
+    def __delete_self(self):
         self.__parent.delete_subtask(self)
 
     def to_dict(self):
