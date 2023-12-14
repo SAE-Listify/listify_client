@@ -114,11 +114,13 @@ class Repository(QFrame):
         self.__task_list.append(created_task)  # create the object in the list
         self.__layout.addWidget(created_task)
 
-    def delete_task(self, num: int):
+    def delete_task(self, task: ts.Task):
         """
-        delete the "num"th task
+        delete the task given as argument
         """
-        del self.__task_list[num]
+        task.deleteLater()
+        self.__task_list.remove(task)
+        logging.debug(f"Deleted task {task} / Remaining tasks: {len(self.__task_list)}")
 
     def open_rename_window(self):
         """

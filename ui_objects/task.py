@@ -83,6 +83,10 @@ class Task(QFrame):
         self.__rename_button = QPushButton("Renommer")
         self.__rename_button.clicked.connect(self.open_rename_window)
 
+        # Delete button
+        self.__delete_button = QPushButton("X")
+        self.__delete_button.clicked.connect(self.__delete_self)
+
         # Creating a HBox for the elements controls
         self.__controls_layout = QHBoxLayout()
         # Adding Widgets to the HBox
@@ -91,6 +95,7 @@ class Task(QFrame):
         self.__controls_layout.addWidget(self.__priority_button, alignment=Qt.AlignRight)
         self.__controls_layout.addWidget(self.__rename_button, alignment=Qt.AlignRight)
         self.__controls_layout.addWidget(self.__create_subtask_button, alignment=Qt.AlignRight)
+        self.__controls_layout.addWidget(self.__delete_button, alignment=Qt.AlignRight)
 
         # Adding elements to the main layout
         self.__layout.addLayout(self.__controls_layout)
@@ -116,6 +121,9 @@ class Task(QFrame):
             name_subtask = "Sous-Tâche"
 
         self.create_subtask(name_subtask)
+
+    def __delete_self(self):
+        self.__parent.delete_task(self)
 
     def create_subtask(self, name_subtask: str = "Sous-tâche"):
         """
