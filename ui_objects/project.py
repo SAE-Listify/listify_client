@@ -53,6 +53,10 @@ class Project(QWidget):
         self.__create_repo_button = QPushButton("Créer un repository")
         self.__create_repo_button.clicked.connect(self.__create_repository_popup)
 
+        # Delete button for the repository
+        self.__delete_button = QPushButton("X")
+        self.__delete_button.clicked.connect(self.__delete_repository)
+
         # adding the button and the repos layout to the main project layout
         self.__layout.addWidget(self.__create_repo_button)
         self.__layout.addWidget(self.__scroll_area)
@@ -99,7 +103,9 @@ class Project(QWidget):
         :param num:
         :return:
         """
-        del self.__repository_list[num]
+        repo.deleteLater()
+        self.repository_list.remove(repo)
+        logging.debug(f"Deleted repository {repo} / Remaining repositories: {len(self.repository_list)}")
 
     def to_dict(self):
         """
