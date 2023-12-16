@@ -15,7 +15,6 @@ from PyQt5.QtGui import QFontMetrics
 
 from ui_objects import subtask as sbts
 
-
 PRIORITIES = ["Aucune", "Basse", "Moyenne", "Haute", "Urgente"]
 
 
@@ -61,12 +60,6 @@ class Task(QFrame):
         self.__task_label = QLabel(self.__name_task)
         self.__task_label.setSizePolicy(QSizePolicy.Minimum, QSizePolicy.Maximum)
 
-        self.__layout.addWidget(self.__task_label)
-
-        if self.__subtask_list:
-            for subtask_widget in self.__subtask_list:
-                self.__layout.addWidget(subtask_widget)
-
         # Check box to check if the task is done
         self.__checkbox = QCheckBox("")
         self.__checkbox.stateChanged.connect(self.__on_checkbox_state_changed)
@@ -90,18 +83,28 @@ class Task(QFrame):
         self.__delete_button.clicked.connect(self.__delete_self)
         self.__delete_button.setFixedWidth(30)
 
+        # Assign button
+        self.__assign_button = QPushButton("Assigner")
+        self.__assign_button.clicked.connect(self.open_assignment_window)
+        self.__assign_button.setFixedWidth(50)
+
         # Creating a HBox for the elements controls
         self.__controls_layout = QHBoxLayout()
         # Adding Widgets to the HBox
         self.__controls_layout.addWidget(self.__checkbox, alignment=Qt.AlignLeft)
-        self.__controls_layout.addWidget(self.__task_label, stretch=1, alignment=Qt.AlignLeft)
         self.__controls_layout.addWidget(self.__priority_button, alignment=Qt.AlignRight)
         self.__controls_layout.addWidget(self.__rename_button, alignment=Qt.AlignRight)
         self.__controls_layout.addWidget(self.__create_subtask_button, alignment=Qt.AlignRight)
         self.__controls_layout.addWidget(self.__delete_button, alignment=Qt.AlignRight)
+        self.__controls_layout.addWidget(self.__assign_button, alignment=Qt.AlignRight)
 
         # Adding elements to the main layout
+        self.__layout.addWidget(self.__task_label, stretch=1, alignment=Qt.AlignLeft)
         self.__layout.addLayout(self.__controls_layout)
+
+        if self.__subtask_list:
+            for subtask_widget in self.__subtask_list:
+                self.__layout.addWidget(subtask_widget)
 
     def __str__(self):  # str to print the title in the project
         """
@@ -196,6 +199,18 @@ class Task(QFrame):
         if ok and new_name:
             self.__name_task = new_name
             self.__task_label.setText(self.__name_task)
+
+    def open_assignment_window(self):
+        """
+        open a window to assign the task to a user
+        :return:
+        """
+        assignee, ok = QInputDialog.getText(
+            self, "Assigner une tâche", "Entrez le prénom de la personne à qui assigner la tâche:"
+        )
+        if ok and assignee:
+            self.assignee = assignee
+            self.__task_label.setText(f"{self.__name_task} pour : {assignee}")
 
     def to_dict(self):
         """
