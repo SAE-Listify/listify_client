@@ -84,7 +84,7 @@ class Subtask(QWidget):
         :return:
         """
         new_name, ok = QInputDialog.getText(
-            self, "Renommer", "Entrez le nouveau nom de la tâche"
+            self, "Renommer", "Entrez le nouveau nom de la sous-tâche"
         )
         if ok and new_name:
             self.__name_subtask = new_name
