@@ -31,7 +31,8 @@ class Task(QFrame):
             name_task: str = 'Tache',
             subtask_list: list = None,
             is_done: bool = False,
-            priority: str = "Aucune"
+            priority: str = "Aucune",
+            assignee: str = None
     ):
         """
         create the task's ui elements, passing a subtask is optional
@@ -49,6 +50,8 @@ class Task(QFrame):
             self.__priority = priority
         else:
             self.__priority = "Aucune"
+
+        self.__assignee = assignee
 
         self.setFrameStyle(QFrame.StyledPanel)
 
@@ -190,7 +193,6 @@ class Task(QFrame):
     def open_rename_window(self):
         """
         open a window to rename the task
-        :return:
         """
         new_name, ok = QInputDialog.getText(
             self, "Renommer", "Entrez le nouveau nom de la tâche"
@@ -202,7 +204,6 @@ class Task(QFrame):
     def open_assignment_window(self):
         """
         open a window to assign the task to a user
-        :return:
         """
         assignee, ok = QInputDialog.getText(
             self, "Assigner une tâche", "Entrez le prénom de la personne à qui assigner la tâche:"
@@ -226,6 +227,7 @@ class Task(QFrame):
             "name": self.__name_task,
             "is_done": self.__is_done,
             "priority": self.__priority,
+            "assignee": self.__assignee,
             "subtasks": subtask_dicts,
         }
 
