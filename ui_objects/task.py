@@ -32,7 +32,8 @@ class Task(QFrame):
             subtask_list: list = None,
             is_done: bool = False,
             priority: str = "Aucune",
-            assignee: str = None
+            assignee: str = None,
+            due_date: str = None
     ):
         """
         create the task's ui elements, passing a subtask is optional
@@ -52,6 +53,7 @@ class Task(QFrame):
             self.__priority = "Aucune"
 
         self.__assignee = assignee
+        self.__due_date = due_date
 
         self.setFrameStyle(QFrame.StyledPanel)
 
@@ -90,6 +92,10 @@ class Task(QFrame):
         self.__assign_button = QPushButton("Assigner")
         self.__assign_button.clicked.connect(self.open_assignment_window)
 
+        # Due date button
+        self.__due_date_button = QPushButton("Date")
+        self.__due_date_button.clicked.connect(self.due_date_window)
+
         # Creating a HBox for the elements controls
         self.__controls_layout = QHBoxLayout()
         # Adding Widgets to the HBox
@@ -97,6 +103,7 @@ class Task(QFrame):
         self.__controls_layout.addWidget(self.__priority_button, alignment=Qt.AlignRight)
         self.__controls_layout.addWidget(self.__rename_button, alignment=Qt.AlignRight)
         self.__controls_layout.addWidget(self.__assign_button, alignment=Qt.AlignRight)
+        self.__controls_layout.addWidget(self.__due_date_button, alignment=Qt.AlignRight)
         self.__controls_layout.addWidget(self.__create_subtask_button, alignment=Qt.AlignRight)
         self.__controls_layout.addWidget(self.__delete_button, alignment=Qt.AlignRight)
 
@@ -107,6 +114,8 @@ class Task(QFrame):
         if self.__subtask_list:
             for subtask_widget in self.__subtask_list:
                 self.__layout.addWidget(subtask_widget)
+
+        self.__update_task_label()
 
     def __str__(self):  # str to print the title in the project
         """
@@ -220,8 +229,31 @@ class Task(QFrame):
             self, "Assigner une tâche", "Entrez le prénom de la personne à qui assigner la tâche:"
         )
         if ok and assignee:
-            self.assignee = assignee
-            self.__task_label.setText(f"{self.__name_task} pour : {assignee}")
+            self.__assignee = assignee
+            self.__update_task_label()
+
+    def due_date_window(self):
+        """
+        open a window to set the due date of the task
+        """
+        due_date, ok = QInputDialog.getText(
+            self, "Date d'échéance", "Entrez la date d'échéance de la tâche:"
+        )
+        if ok and due_date:
+            self.__due_date = due_date
+            self.__update_task_label()
+
+    def __update_task_label(self):
+        """
+        update the task label
+        """
+        if self.__assignee and not self.__due_date:
+            self.__task_label.setText(f"{self.__name_task} \nAssignée à: {self.__assignee}")
+        elif not self.__assignee and self.__due_date:
+            self.__task_label.setText(f"{self.__name_task} \nPour le: {self.__due_date}")
+        elif self.__assignee and self.__due_date:
+            self.__task_label.setText(
+                f"{self.__name_task} \nAssignée à: {self.__assignee} \nPour le: {self.__due_date}")
 
     def to_dict(self):
         """
