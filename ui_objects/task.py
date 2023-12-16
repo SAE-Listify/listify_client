@@ -198,16 +198,16 @@ class Task(QFrame):
             self.__priority_button.setText(f"Priorité")
             self.__priority_button.setStyleSheet("background-color: None")
         elif self.__priority == "Basse":
-            self.__priority_button.setText(f"Priorité : {self.__priority}")
+            self.__priority_button.setText(f"{self.__priority}")
             self.__priority_button.setStyleSheet("background-color: green")
         elif self.__priority == "Moyenne":
-            self.__priority_button.setText(f"Priorité : {self.__priority}")
+            self.__priority_button.setText(f"{self.__priority}")
             self.__priority_button.setStyleSheet("background-color: yellow")
         elif self.__priority == "Haute":
-            self.__priority_button.setText(f"Priorité : {self.__priority}")
+            self.__priority_button.setText(f"{self.__priority}")
             self.__priority_button.setStyleSheet("background-color: orange")
         elif self.__priority == "Urgente":
-            self.__priority_button.setText(f"Priorité : {self.__priority}")
+            self.__priority_button.setText(f"{self.__priority}")
             self.__priority_button.setStyleSheet("background-color: red")
 
     def open_rename_window(self):
