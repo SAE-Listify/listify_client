@@ -86,7 +86,6 @@ class Task(QFrame):
         # Assign button
         self.__assign_button = QPushButton("Assigner")
         self.__assign_button.clicked.connect(self.open_assignment_window)
-        self.__assign_button.setFixedWidth(50)
 
         # Creating a HBox for the elements controls
         self.__controls_layout = QHBoxLayout()
@@ -94,9 +93,9 @@ class Task(QFrame):
         self.__controls_layout.addWidget(self.__checkbox, alignment=Qt.AlignLeft)
         self.__controls_layout.addWidget(self.__priority_button, alignment=Qt.AlignRight)
         self.__controls_layout.addWidget(self.__rename_button, alignment=Qt.AlignRight)
+        self.__controls_layout.addWidget(self.__assign_button, alignment=Qt.AlignRight)
         self.__controls_layout.addWidget(self.__create_subtask_button, alignment=Qt.AlignRight)
         self.__controls_layout.addWidget(self.__delete_button, alignment=Qt.AlignRight)
-        self.__controls_layout.addWidget(self.__assign_button, alignment=Qt.AlignRight)
 
         # Adding elements to the main layout
         self.__layout.addWidget(self.__task_label, alignment=Qt.AlignLeft)
