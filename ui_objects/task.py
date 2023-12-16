@@ -99,7 +99,7 @@ class Task(QFrame):
         self.__controls_layout.addWidget(self.__assign_button, alignment=Qt.AlignRight)
 
         # Adding elements to the main layout
-        self.__layout.addWidget(self.__task_label, stretch=1, alignment=Qt.AlignLeft)
+        self.__layout.addWidget(self.__task_label, alignment=Qt.AlignLeft)
         self.__layout.addLayout(self.__controls_layout)
 
         if self.__subtask_list:
