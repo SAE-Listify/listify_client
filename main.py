@@ -149,6 +149,14 @@ class Listify(QWidget):
         logging.info(f"new project created: {name}")
         logging.debug(f"projects: {self.__projects}")
 
+    def delete_project_by_index(self, index: int):
+        if index < len(self.__projects):
+            if self.__projects[index] in self.opened_projects:
+                self.tabWidget.removeTab(self.opened_projects.index(self.__projects[index]))
+
+            self.__projects.pop(index)
+            logging.debug(f"deleted project index {index}")
+
     def goto_last_tab(self):
         """
         Show the last tab, used on project creation by the sidebar

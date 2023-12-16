@@ -15,7 +15,6 @@ from PyQt5.QtGui import QFontMetrics
 
 from ui_objects import subtask as sbts
 
-
 PRIORITIES = ["Aucune", "Basse", "Moyenne", "Haute", "Urgente"]
 
 
@@ -32,7 +31,9 @@ class Task(QFrame):
             name_task: str = 'Tache',
             subtask_list: list = None,
             is_done: bool = False,
-            priority: str = "Aucune"
+            priority: str = "Aucune",
+            assignee: str = None,
+            due_date: str = None
     ):
         """
         create the task's ui elements, passing a subtask is optional
@@ -51,6 +52,9 @@ class Task(QFrame):
         else:
             self.__priority = "Aucune"
 
+        self.__assignee = assignee
+        self.__due_date = due_date
+
         self.setFrameStyle(QFrame.StyledPanel)
 
         # creating a widget and set layout
@@ -60,12 +64,6 @@ class Task(QFrame):
 
         self.__task_label = QLabel(self.__name_task)
         self.__task_label.setSizePolicy(QSizePolicy.Minimum, QSizePolicy.Maximum)
-
-        self.__layout.addWidget(self.__task_label)
-
-        if self.__subtask_list:
-            for subtask_widget in self.__subtask_list:
-                self.__layout.addWidget(subtask_widget)
 
         # Check box to check if the task is done
         self.__checkbox = QCheckBox("")
@@ -90,18 +88,34 @@ class Task(QFrame):
         self.__delete_button.clicked.connect(self.__delete_self)
         self.__delete_button.setFixedWidth(30)
 
+        # Assign button
+        self.__assign_button = QPushButton("Assigner")
+        self.__assign_button.clicked.connect(self.open_assignment_window)
+
+        # Due date button
+        self.__due_date_button = QPushButton("Date")
+        self.__due_date_button.clicked.connect(self.due_date_window)
+
         # Creating a HBox for the elements controls
         self.__controls_layout = QHBoxLayout()
         # Adding Widgets to the HBox
         self.__controls_layout.addWidget(self.__checkbox, alignment=Qt.AlignLeft)
-        self.__controls_layout.addWidget(self.__task_label, stretch=1, alignment=Qt.AlignLeft)
         self.__controls_layout.addWidget(self.__priority_button, alignment=Qt.AlignRight)
         self.__controls_layout.addWidget(self.__rename_button, alignment=Qt.AlignRight)
+        self.__controls_layout.addWidget(self.__assign_button, alignment=Qt.AlignRight)
+        self.__controls_layout.addWidget(self.__due_date_button, alignment=Qt.AlignRight)
         self.__controls_layout.addWidget(self.__create_subtask_button, alignment=Qt.AlignRight)
         self.__controls_layout.addWidget(self.__delete_button, alignment=Qt.AlignRight)
 
         # Adding elements to the main layout
+        self.__layout.addWidget(self.__task_label, alignment=Qt.AlignLeft)
         self.__layout.addLayout(self.__controls_layout)
+
+        if self.__subtask_list:
+            for subtask_widget in self.__subtask_list:
+                self.__layout.addWidget(subtask_widget)
+
+        self.__update_task_label()
 
     def __str__(self):  # str to print the title in the project
         """
@@ -182,13 +196,23 @@ class Task(QFrame):
     def __set_priority_button_text(self):
         if self.__priority == "Aucune":
             self.__priority_button.setText(f"Priorité")
-        else:
-            self.__priority_button.setText(f"Priorité : {self.__priority}")
+            self.__priority_button.setStyleSheet("background-color: None")
+        elif self.__priority == "Basse":
+            self.__priority_button.setText(f"{self.__priority}")
+            self.__priority_button.setStyleSheet("background-color: green")
+        elif self.__priority == "Moyenne":
+            self.__priority_button.setText(f"{self.__priority}")
+            self.__priority_button.setStyleSheet("background-color: yellow")
+        elif self.__priority == "Haute":
+            self.__priority_button.setText(f"{self.__priority}")
+            self.__priority_button.setStyleSheet("background-color: orange")
+        elif self.__priority == "Urgente":
+            self.__priority_button.setText(f"{self.__priority}")
+            self.__priority_button.setStyleSheet("background-color: red")
 
     def open_rename_window(self):
         """
         open a window to rename the task
-        :return:
         """
         new_name, ok = QInputDialog.getText(
             self, "Renommer", "Entrez le nouveau nom de la tâche"
@@ -196,6 +220,40 @@ class Task(QFrame):
         if ok and new_name:
             self.__name_task = new_name
             self.__task_label.setText(self.__name_task)
+
+    def open_assignment_window(self):
+        """
+        open a window to assign the task to a user
+        """
+        assignee, ok = QInputDialog.getText(
+            self, "Assigner une tâche", "Entrez le prénom de la personne à qui assigner la tâche:"
+        )
+        if ok and assignee:
+            self.__assignee = assignee
+            self.__update_task_label()
+
+    def due_date_window(self):
+        """
+        open a window to set the due date of the task
+        """
+        due_date, ok = QInputDialog.getText(
+            self, "Date d'échéance", "Entrez la date d'échéance de la tâche:"
+        )
+        if ok and due_date:
+            self.__due_date = due_date
+            self.__update_task_label()
+
+    def __update_task_label(self):
+        """
+        update the task label
+        """
+        if self.__assignee and not self.__due_date:
+            self.__task_label.setText(f"{self.__name_task} \nAssignée à: {self.__assignee}")
+        elif not self.__assignee and self.__due_date:
+            self.__task_label.setText(f"{self.__name_task} \nPour le: {self.__due_date}")
+        elif self.__assignee and self.__due_date:
+            self.__task_label.setText(
+                f"{self.__name_task} \nAssignée à: {self.__assignee} \nPour le: {self.__due_date}")
 
     def to_dict(self):
         """
@@ -212,6 +270,7 @@ class Task(QFrame):
             "name": self.__name_task,
             "is_done": self.__is_done,
             "priority": self.__priority,
+            "assignee": self.__assignee,
             "subtasks": subtask_dicts,
         }
 

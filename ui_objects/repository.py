@@ -130,7 +130,7 @@ class Repository(QFrame):
         :return:
         """
         new_name, ok = QInputDialog.getText(
-            self, "Renommer", "Entrez le nouveau nom de la tâche"
+            self, "Renommer", "Entrez le nouveau nom du repository"
         )
         if ok and new_name:
             self.__name_rep = new_name

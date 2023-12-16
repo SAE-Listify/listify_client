@@ -95,6 +95,7 @@ class Sidebar(QWidget):
         open_button_to_remove = self.__projects_open_buttons.pop(index)
         delete_button_to_remove = self.__projects_delete_buttons.pop(index)
         layout_to_remove = self.__projects_layouts.pop(index)
+        self.parent.delete_project_by_index(index)
         open_button_to_remove.deleteLater()
         delete_button_to_remove.deleteLater()
         layout_to_remove.deleteLater()
