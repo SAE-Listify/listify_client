@@ -13,6 +13,7 @@ from PyQt5.QtWidgets import (
 from PyQt5.QtCore import Qt
 from PyQt5.QtGui import QFontMetrics
 from datetime import datetime
+from PyQt5.QtCore import QTimer
 
 from ui_objects import subtask as sbts
 
@@ -34,7 +35,7 @@ class Task(QFrame):
             is_done: bool = False,
             priority: str = "Aucune",
             assignee: str = None,
-            due_date: str = None
+            due_date: datetime = None
     ):
         """
         create the task's ui elements, passing a subtask is optional
@@ -97,6 +98,12 @@ class Task(QFrame):
         self.__due_date_button = QPushButton("Date")
         self.__due_date_button.clicked.connect(self.due_date_window)
 
+        # Countdown label
+        self.__countdown_label = QLabel()
+        self.__countdown_timer = QTimer(self)
+        self.__countdown_timer.timeout.connect(self.__countdow)
+        self.__countdown_timer.start(1000)
+
         # Creating a HBox for the elements controls
         self.__controls_layout = QHBoxLayout()
         # Adding Widgets to the HBox
@@ -111,6 +118,7 @@ class Task(QFrame):
         # Adding elements to the main layout
         self.__layout.addWidget(self.__task_label, alignment=Qt.AlignLeft)
         self.__layout.addLayout(self.__controls_layout)
+        self.__layout.addWidget(self.__countdown_label, alignment=Qt.AlignRight)
 
         if self.__subtask_list:
             for subtask_widget in self.__subtask_list:
@@ -247,6 +255,7 @@ class Task(QFrame):
                 self.__update_task_label()
             except ValueError as e:
                 logging.error(f"Error while parsing due date: {e}")
+
     def __update_task_label(self):
         """
         update the task label
@@ -258,6 +267,19 @@ class Task(QFrame):
         elif self.__assignee and self.__due_date:
             self.__task_label.setText(
                 f"{self.__name_task} \nAssignée à: {self.__assignee} \nPour le: {self.__due_date}")
+
+    def __countdow(self):
+        """
+        calculate the time left before the due date
+        """
+        if self.__due_date:
+            try:
+                due_date = datetime.strptime(self.__due_date, "%d/%m/%Y")
+                current_datetime = datetime.now()
+                time_left = due_date - current_datetime
+                self.__countdown_label.setText(f"{time_left.days} jours restants")
+            except ValueError as e:
+                logging.error(f"Error while calculating the remaining time: {e}")
 
     def to_dict(self):
         """
@@ -275,6 +297,7 @@ class Task(QFrame):
             "is_done": self.__is_done,
             "priority": self.__priority,
             "assignee": self.__assignee,
+            "due_date": self.__due_date,
             "subtasks": subtask_dicts,
         }
 
