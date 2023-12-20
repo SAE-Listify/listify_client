@@ -12,6 +12,7 @@ from PyQt5.QtWidgets import (
 )
 from PyQt5.QtCore import Qt
 from PyQt5.QtGui import QFontMetrics
+from datetime import datetime
 
 from ui_objects import subtask as sbts
 
@@ -237,12 +238,15 @@ class Task(QFrame):
         open a window to set the due date of the task
         """
         due_date, ok = QInputDialog.getText(
-            self, "Date d'échéance", "Entrez la date d'échéance de la tâche:"
+            self, "Date d'échéance", "Entrez la date d'échéance de la tâche: (sous forme dd/mm/yyyy)"
         )
         if ok and due_date:
-            self.__due_date = due_date
-            self.__update_task_label()
-
+            try:
+                parsed_due_time = datetime.strptime(due_date, "%d/%m/%Y")
+                self.__due_date = parsed_due_time.strftime("%d/%m/%Y")
+                self.__update_task_label()
+            except ValueError as e:
+                logging.error(f"Error while parsing due date: {e}")
     def __update_task_label(self):
         """
         update the task label
