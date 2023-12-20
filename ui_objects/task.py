@@ -292,12 +292,21 @@ class Task(QFrame):
         for subtask in self.__subtask_list:
             subtask_dicts.append(subtask.to_dict())
 
+        __convert_due_date = None
+        if self.__due_date:
+            try:
+                due_date = datetime.strptime(self.__due_date, "%d/%m/%Y")
+                __converted_due_date = due_date.strftime("%Y-%m-%d")
+            except ValueError as e:
+                logging.error(f"Error : {e}")
+                __converted_due_date = self.__due_date
+
         return {
             "name": self.__name_task,
             "is_done": self.__is_done,
             "priority": self.__priority,
             "assignee": self.__assignee,
-            "due_date": self.__due_date,
+            "due_date": self.__convert_due_date,
             "subtasks": subtask_dicts,
         }
 
