@@ -262,7 +262,7 @@ class Task(QFrame):
         if self.__assignee and not self.__due_date:
             self.__task_label.setText(f"{self.__name_task} \nAssignée à: {self.__assignee}")
         elif not self.__assignee and self.__due_date:
-            self.__task_label.setText(f"{self.__name_task} \nPour le: {self.__due_date}")
+            self.__task_label.setText(f"{self.__name_task} \nPour le: {self.__due_date.strftime('%d/%m/%Y')}")
         elif self.__assignee and self.__due_date:
             self.__task_label.setText(
                 f"{self.__name_task} \nAssignée à: {self.__assignee} \nPour le: {self.__due_date.strftime('%d/%m/%Y')}")
