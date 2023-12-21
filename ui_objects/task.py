@@ -294,7 +294,7 @@ class Task(QFrame):
             "is_done": self.__is_done,
             "priority": self.__priority,
             "assignee": self.__assignee,
-            "due_date": self.__due_date.strftime("%Y-%m-%d"),
+            "due_date": self.__due_date.strftime("%Y-%m-%d") if self.__due_date else None,
             "subtasks": subtask_dicts,
         }
 
