@@ -250,8 +250,7 @@ class Task(QFrame):
         )
         if ok and due_date:
             try:
-                parsed_due_time = datetime.strptime(due_date, "%d/%m/%Y")
-                self.__due_date = parsed_due_time.strftime("%d/%m/%Y")
+                self.__due_date = datetime.strptime(due_date, "%d/%m/%Y")
                 self.__update_task_label()
             except ValueError as e:
                 logging.error(f"Error while parsing due date: {e}")
@@ -266,7 +265,7 @@ class Task(QFrame):
             self.__task_label.setText(f"{self.__name_task} \nPour le: {self.__due_date}")
         elif self.__assignee and self.__due_date:
             self.__task_label.setText(
-                f"{self.__name_task} \nAssignée à: {self.__assignee} \nPour le: {self.__due_date}")
+                f"{self.__name_task} \nAssignée à: {self.__assignee} \nPour le: {self.__due_date.strftime('%d/%m/%Y')}")
 
     def __countdow(self):
         """
@@ -274,9 +273,7 @@ class Task(QFrame):
         """
         if self.__due_date:
             try:
-                due_date = datetime.strptime(self.__due_date, "%d/%m/%Y")
-                current_datetime = datetime.now()
-                time_left = due_date - current_datetime
+                time_left = self.__due_date - datetime.now()
                 self.__countdown_label.setText(f"{time_left.days} jours restants")
             except ValueError as e:
                 logging.error(f"Error while calculating the remaining time: {e}")
@@ -292,21 +289,12 @@ class Task(QFrame):
         for subtask in self.__subtask_list:
             subtask_dicts.append(subtask.to_dict())
 
-        __convert_due_date = None
-        if self.__due_date:
-            try:
-                due_date = datetime.strptime(self.__due_date, "%d/%m/%Y")
-                __converted_due_date = due_date.strftime("%Y-%m-%d")
-            except ValueError as e:
-                logging.error(f"Error : {e}")
-                __converted_due_date = self.__due_date
-
         return {
             "name": self.__name_task,
             "is_done": self.__is_done,
             "priority": self.__priority,
             "assignee": self.__assignee,
-            "due_date": self.__convert_due_date,
+            "due_date": self.__due_date.strftime("%Y-%m-%d"),
             "subtasks": subtask_dicts,
         }
 

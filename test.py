@@ -92,6 +92,7 @@ def test_project_to_dict(test_app):
                         "is_done": True,
                         "priority": "Aucune",
                         "assignee": None,
+                        "due_date": None,
                         "subtasks": [
                             {"name": "Subtask1", "is_done": True},
                             {"name": "Subtask2", "is_done": True},
@@ -102,6 +103,7 @@ def test_project_to_dict(test_app):
                         "is_done": False,
                         "priority": "Aucune",
                         "assignee": None,
+                        "due_date": None,
                         "subtasks": [
                             {"name": "Subtask1", "is_done": True},
                         ]
