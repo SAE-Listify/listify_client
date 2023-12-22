@@ -1,4 +1,5 @@
 import logging
+from datetime import datetime
 from PyQt5.QtWidgets import (
     QWidget,
     QLabel,
@@ -115,9 +116,36 @@ class Project(QWidget):
             repo_dicts.append(repo.to_dict())
 
         return {
-            "name_project": self.__name_project,
+            "name": self.__name_project,
             "repositories": repo_dicts,
         }
+
+    def repos_from_dicts(self, repo_dicts_list: list):
+        """
+        create a list of repositories from a list of dictionaries
+        :param repo_dicts_list:
+        :return:
+        """
+        for repo_dict in repo_dicts_list:
+            # creating the repo
+            self.create_repository(repo_dict["name"])
+
+            # creating the repo tasks
+            for task_dict in repo_dict["tasks"]:
+                self.__repository_list[-1].create_task(
+                    name_task=task_dict["name"],
+                    is_done=task_dict["completed"],
+                    priority=task_dict["priority"],
+                    assignee=task_dict["assignee"],
+                    due_date=datetime.strptime(task_dict["due_date"], "%Y-%m-%d") if task_dict["due_date"] else None
+                )
+
+                # creating the task subtasks
+                for subtask in task_dict["subtasks"]:
+                    self.__repository_list[-1].task_list[-1].create_subtask(
+                        subtask["name"],
+                        subtask["completed"]
+                    )
 
     @property
     def name_project(self):

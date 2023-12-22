@@ -1,5 +1,7 @@
 import logging
 import sys
+import requests
+import json
 
 from PyQt5.QtWidgets import (
     QApplication,
@@ -21,6 +23,8 @@ if DEBUG:
     logging.basicConfig(level=logging.DEBUG)
 else:
     logging.basicConfig(level=logging.WARNING)
+
+API = "http://192.168.122.199:8000"
 
 
 class MainWindow(QMainWindow):
@@ -75,8 +79,15 @@ class Listify(QWidget):
         self.tabWidget.tabCloseRequested.connect(self.__closeTab)
 
         self.__projects = []
-        self.new_project("test1")
-        self.new_project("tEsT2")
+
+        try:
+            api_list_of_project = json.loads(requests.get(f"{API}/get/all_projects").text)
+            for project in api_list_of_project:
+                proj_dict = json.loads(requests.get(f"{API}/get/project/{project['project_id']}").text)
+                self.new_project(proj_dict["name"])
+                self.__projects[-1].repos_from_dicts(proj_dict["repositories"])
+        except Exception as e:
+            logging.error(e)
 
         # we need to load/create projects before loading the sidebar
         self.sidebarWidget = ui_objects.Sidebar(parent=self)

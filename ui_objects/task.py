@@ -151,13 +151,14 @@ class Task(QFrame):
     def __delete_self(self):
         self.__parent.delete_task(self)
 
-    def create_subtask(self, name_subtask: str = "Sous-tâche"):
+    def create_subtask(self, name_subtask: str = "Sous-tâche", is_done: bool = False):
         """
         create a subtask with a name
         :param name_subtask: str
+        :param is_done:
         :return:
         """
-        created_subtask = sbts.Subtask(self, name_subtask)
+        created_subtask = sbts.Subtask(self, name_subtask, is_done)
         self.__subtask_list.append(created_subtask)  # create the object in the list
         self.__layout.addWidget(created_subtask)
 
