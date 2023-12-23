@@ -21,7 +21,7 @@ class Project(QWidget):
     Project => Repository => Task => Subtask
     """
 
-    def __init__(self, name_project: str = 'Project', repository_list: list = None, id: int = 0):  # variable init
+    def __init__(self, parent, name_project: str = 'Project', repository_list: list = None, id: int = 0):# variable init
         """
         Creates the ui objects, passing a repo list is optional
         :param name_project: str
@@ -29,6 +29,7 @@ class Project(QWidget):
         """
         super().__init__()
 
+        self.__parent = parent
         if repository_list is None:  # creation of an empty list if none is given
             repository_list = []
         self.__name_project = name_project
@@ -55,6 +56,9 @@ class Project(QWidget):
 
         self.__create_repo_button = QPushButton("Créer un repository")
         self.__create_repo_button.clicked.connect(self.__create_repository_popup)
+
+        self.__update_button = QPushButton("Mettre à jour")
+        self.__api_button.clicked.connect(lambda: self.__parent.update_project_api(self))
 
         # adding the button and the repos layout to the main project layout
         self.__layout.addWidget(self.__create_repo_button)
