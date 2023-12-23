@@ -5,6 +5,7 @@ from ui_objects.sidebar import Sidebar
 from ui_objects.project import Project
 from ui_objects.task import Task as ts
 from PyQt5.QtWidgets import QApplication, QWidget
+from main import Listify, MainWindow
 
 
 @pytest.fixture(scope="module")
@@ -21,7 +22,7 @@ def test_repository_initialization(test_app):
     :param test_app:
     :return:
     """
-    repository = Repository(Project())
+    repository = Repository(Project(Listify(MainWindow())))
     assert repository.name_rep == "Repertoire"
     assert repository.task_list == []
 
@@ -32,7 +33,7 @@ def test_repository_add_task(test_app):
     :param test_app:
     :return:
     """
-    repository = Repository(Project())
+    repository = Repository(Project(Listify(MainWindow())))
     repository.create_task("Test Task")
     assert len(repository.task_list) == 1
     assert repository.task_list[0].name_task == "Test Task"
@@ -45,7 +46,7 @@ def test_task_initialization(test_app):
     :param test_app:
     :return:
     """
-    task = ts(Repository(Project()))
+    task = ts(Repository(Project(Listify(MainWindow()))))
     assert task.name_task == "Tache"
     assert task.subtask_list == []
 
@@ -57,7 +58,7 @@ def test_task_create_subtask(test_app):
     :param test_app:
     :return:
     """
-    task = ts(Repository(Project()))
+    task = ts(Repository(Project(Listify(MainWindow()))))
     task.create_subtask("Subtask 1")
     assert len(task.subtask_list) == 1
     assert task.subtask_list[0].name_subtask == "Subtask 1"
@@ -70,7 +71,7 @@ def test_project_to_dict(test_app):
     :param test_app:
     :return:
     """
-    project = Project("TheProject")
+    project = Project(Listify(MainWindow()), "TheProject")
     project.create_repository("Repo1")
     project.repository_list[0].create_task("Task1")
     project.repository_list[0].create_task("Task2")
@@ -89,23 +90,23 @@ def test_project_to_dict(test_app):
                 "tasks": [
                     {
                         "name": "Task1",
-                        "is_done": True,
+                        "completed": True,
                         "priority": "Aucune",
                         "assignee": None,
                         "due_date": None,
                         "subtasks": [
-                            {"name": "Subtask1", "is_done": True},
-                            {"name": "Subtask2", "is_done": True},
+                            {"name": "Subtask1", "completed": True},
+                            {"name": "Subtask2", "completed": True},
                         ]
                     },
                     {
                         "name": "Task2",
-                        "is_done": False,
+                        "completed": False,
                         "priority": "Aucune",
                         "assignee": None,
                         "due_date": None,
                         "subtasks": [
-                            {"name": "Subtask1", "is_done": True},
+                            {"name": "Subtask1", "completed": True},
                         ]
                     }
                 ]
