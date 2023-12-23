@@ -82,7 +82,7 @@ def test_project_to_dict(test_app):
     project.repository_list[0].task_list[1].subtask_list[0].is_done = True
 
     expected_dict = {
-        "name_project": "TheProject",
+        "name": "TheProject",
         "repositories": [
             {
                 "name": "Repo1",
