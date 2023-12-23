@@ -84,8 +84,11 @@ class Listify(QWidget):
             api_list_of_project = json.loads(requests.get(f"{API}/get/all_projects").text)
             for project in api_list_of_project:
                 proj_dict = json.loads(requests.get(f"{API}/get/project/{project['project_id']}").text)
-                self.new_project(proj_dict["name"])
+                self.new_project_from_api(proj_dict["name"])
+                # create all the children objects from the json given by the server
                 self.__projects[-1].repos_from_dicts(proj_dict["repositories"])
+                # set the local id to the remote id, important for upload later on
+                self.__projects[-1].id = project["project_id"]
         except Exception as e:
             logging.error(e)
 
@@ -152,7 +155,7 @@ class Listify(QWidget):
 
     def new_project(self, name):
         """
-        Create a new project
+        Create a new project, instantly uploading it to the server
         """
         new_project = ui_objects.Project(name_project=name)
         self.__projects.append(new_project)
@@ -160,11 +163,41 @@ class Listify(QWidget):
         logging.info(f"new project created: {name}")
         logging.debug(f"projects: {self.__projects}")
 
+        try:
+            create_proj_endpoint = json.loads(
+                requests.post(f"{API}/upload/project", json=new_project.to_dict()).text
+            )
+            logging.debug(f"create_proj_endpoint response: {create_proj_endpoint}")
+
+            # we can get the remote project id from the server
+            create_proj_endpoint = json.loads(create_proj_endpoint)
+            self.__projects[-1].id = create_proj_endpoint["project_id"]
+        except Exception as e:
+            logging.error(f"error creating project on the backend: {e}")
+
+    def new_project_from_api(self, name):
+        """
+        Create a new project
+        """
+        new_project = ui_objects.Project(name_project=name)
+        self.__projects.append(new_project)
+        self.__openTab(self.__projects[-1])
+        logging.info(f"new project created from api: {name}")
+        logging.debug(f"projects: {self.__projects}")
+
     def delete_project_by_index(self, index: int):
         if index < len(self.__projects):
             if self.__projects[index] in self.opened_projects:
                 self.tabWidget.removeTab(self.opened_projects.index(self.__projects[index]))
 
+            proj_id = self.__projects[index].id
+            # if id is not 0 it should be on the server
+            if proj_id != 0:
+                try:
+                    endpoint = json.loads(requests.delete(f"{API}/delete/project/{proj_id}").text)
+                    logging.info(f"{endpoint['element_type']} {endpoint['element_id']} {endpoint['message']}")
+                except Exception as e:
+                    logging.error(f"Error while deleting the project from the backend: {e}")
             self.__projects.pop(index)
             logging.debug(f"deleted project index {index}")
 

@@ -13,6 +13,7 @@ from PyQt5.QtCore import Qt
 
 from ui_objects import repository as repo
 
+
 class Project(QWidget):
     """
     Project
@@ -20,7 +21,7 @@ class Project(QWidget):
     Project => Repository => Task => Subtask
     """
 
-    def __init__(self, name_project: str = 'Project', repository_list: list = None):  # variable init
+    def __init__(self, name_project: str = 'Project', repository_list: list = None, id: int = 0):  # variable init
         """
         Creates the ui objects, passing a repo list is optional
         :param name_project: str
@@ -32,6 +33,7 @@ class Project(QWidget):
             repository_list = []
         self.__name_project = name_project
         self.__repository_list = repository_list
+        self.__id = id
 
         # Creating layouts and widgets
         self.__layout = QVBoxLayout()
@@ -180,3 +182,16 @@ class Project(QWidget):
         :return:
         """
         self.__repository_list = repository_list
+
+    @property
+    def id(self):
+        """
+        returns the id of the project
+        :return: id of the project
+        """
+        return self.__id
+
+    @id.setter
+    def id(self, id: int):
+        if self.__id == 0:
+            self.__id = id
