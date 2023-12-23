@@ -292,7 +292,7 @@ class Task(QFrame):
 
         return {
             "name": self.__name_task,
-            "is_done": self.__is_done,
+            "completed": self.__is_done,
             "priority": self.__priority,
             "assignee": self.__assignee,
             "due_date": self.__due_date.strftime("%Y-%m-%d") if self.__due_date else None,
