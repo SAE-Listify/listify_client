@@ -21,7 +21,8 @@ class Project(QWidget):
     Project => Repository => Task => Subtask
     """
 
-    def __init__(self, parent, name_project: str = 'Project', repository_list: list = None, id: int = 0):# variable init
+    def __init__(self, parent, name_project: str = 'Project', repository_list: list = None,
+                 id: int = 0):  # variable init
         """
         Creates the ui objects, passing a repo list is optional
         :param name_project: str
@@ -40,10 +41,11 @@ class Project(QWidget):
         self.__layout = QVBoxLayout()
         self.__layout.setAlignment(Qt.AlignTop)
         self.setLayout(self.__layout)
+        self.__layout_update = QHBoxLayout()
 
         # creating a widget & its layout to put in QScrollArea for the repos
         self.__layout_repo = QHBoxLayout()
-        self.__layout_repo.setAlignment(Qt.AlignLeft)   # do not center the repos
+        self.__layout_repo.setAlignment(Qt.AlignLeft)  # do not center the repos
         self.__scrollable_widget = QWidget()
         self.__scrollable_widget.setLayout(self.__layout_repo)
 
@@ -58,11 +60,13 @@ class Project(QWidget):
         self.__create_repo_button.clicked.connect(self.__create_repository_popup)
 
         self.__update_button = QPushButton("Mettre à jour")
-        self.__api_button.clicked.connect(lambda: self.__parent.update_project_api(self))
+        self.__update_button.clicked.connect(lambda: self.__parent.update_project_api(self))
 
         # adding the button and the repos layout to the main project layout
-        self.__layout.addWidget(self.__create_repo_button)
+        self.__layout_update.addWidget(self.__create_repo_button)
+        self.__layout_udpate.addWidget(self.__update_button)
         self.__layout.addWidget(self.__scroll_area)
+        self.__layout.addLayout(self.__layout_update)
 
         if self.__repository_list:
             for repo_widget in self.__repository_list:
