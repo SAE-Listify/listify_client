@@ -65,8 +65,8 @@ class Project(QWidget):
         # adding the button and the repos layout to the main project layout
         self.__layout_update.addWidget(self.__create_repo_button)
         self.__layout_update.addWidget(self.__update_button)
-        self.__layout.addWidget(self.__scroll_area)
         self.__layout.addLayout(self.__layout_update)
+        self.__layout.addWidget(self.__scroll_area)
 
         if self.__repository_list:
             for repo_widget in self.__repository_list:
