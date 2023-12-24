@@ -1,0 +1,6 @@
+# more verbose logging
+debug = true
+
+# ip address & port of the listify_api server
+api_addr = "localhost"
+api_port = 8000
