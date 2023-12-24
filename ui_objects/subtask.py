@@ -101,7 +101,7 @@ class Subtask(QWidget):
         """
         return {
             "name": self.__name_subtask,
-            "is_done": self.__is_done,
+            "completed": self.__is_done,
         }
 
     @property

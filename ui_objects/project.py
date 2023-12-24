@@ -1,4 +1,5 @@
 import logging
+from datetime import datetime
 from PyQt5.QtWidgets import (
     QWidget,
     QLabel,
@@ -12,6 +13,7 @@ from PyQt5.QtCore import Qt
 
 from ui_objects import repository as repo
 
+
 class Project(QWidget):
     """
     Project
@@ -19,7 +21,8 @@ class Project(QWidget):
     Project => Repository => Task => Subtask
     """
 
-    def __init__(self, name_project: str = 'Project', repository_list: list = None):  # variable init
+    def __init__(self, parent, name_project: str = 'Project', repository_list: list = None,
+                 id: int = 0):  # variable init
         """
         Creates the ui objects, passing a repo list is optional
         :param name_project: str
@@ -27,19 +30,22 @@ class Project(QWidget):
         """
         super().__init__()
 
+        self.__parent = parent
         if repository_list is None:  # creation of an empty list if none is given
             repository_list = []
         self.__name_project = name_project
         self.__repository_list = repository_list
+        self.__id = id
 
         # Creating layouts and widgets
         self.__layout = QVBoxLayout()
         self.__layout.setAlignment(Qt.AlignTop)
         self.setLayout(self.__layout)
+        self.__layout_update = QHBoxLayout()
 
         # creating a widget & its layout to put in QScrollArea for the repos
         self.__layout_repo = QHBoxLayout()
-        self.__layout_repo.setAlignment(Qt.AlignLeft)   # do not center the repos
+        self.__layout_repo.setAlignment(Qt.AlignLeft)  # do not center the repos
         self.__scrollable_widget = QWidget()
         self.__scrollable_widget.setLayout(self.__layout_repo)
 
@@ -53,8 +59,13 @@ class Project(QWidget):
         self.__create_repo_button = QPushButton("Créer un repository")
         self.__create_repo_button.clicked.connect(self.__create_repository_popup)
 
+        self.__update_button = QPushButton("Mettre à jour")
+        self.__update_button.clicked.connect(lambda: self.__parent.update_project_api(self))
+
         # adding the button and the repos layout to the main project layout
-        self.__layout.addWidget(self.__create_repo_button)
+        self.__layout_update.addWidget(self.__create_repo_button)
+        self.__layout_update.addWidget(self.__update_button)
+        self.__layout.addLayout(self.__layout_update)
         self.__layout.addWidget(self.__scroll_area)
 
         if self.__repository_list:
@@ -115,9 +126,36 @@ class Project(QWidget):
             repo_dicts.append(repo.to_dict())
 
         return {
-            "name_project": self.__name_project,
+            "name": self.__name_project,
             "repositories": repo_dicts,
         }
+
+    def repos_from_dicts(self, repo_dicts_list: list):
+        """
+        create a list of repositories from a list of dictionaries
+        :param repo_dicts_list:
+        :return:
+        """
+        for repo_dict in repo_dicts_list:
+            # creating the repo
+            self.create_repository(repo_dict["name"])
+
+            # creating the repo tasks
+            for task_dict in repo_dict["tasks"]:
+                self.__repository_list[-1].create_task(
+                    name_task=task_dict["name"],
+                    is_done=task_dict["completed"],
+                    priority=task_dict["priority"],
+                    assignee=task_dict["assignee"],
+                    due_date=datetime.strptime(task_dict["due_date"], "%Y-%m-%d") if task_dict["due_date"] else None
+                )
+
+                # creating the task subtasks
+                for subtask in task_dict["subtasks"]:
+                    self.__repository_list[-1].task_list[-1].create_subtask(
+                        subtask["name"],
+                        subtask["completed"]
+                    )
 
     @property
     def name_project(self):
@@ -152,3 +190,16 @@ class Project(QWidget):
         :return:
         """
         self.__repository_list = repository_list
+
+    @property
+    def id(self):
+        """
+        returns the id of the project
+        :return: id of the project
+        """
+        return self.__id
+
+    @id.setter
+    def id(self, id: int):
+        if self.__id == 0:
+            self.__id = id

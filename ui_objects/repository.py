@@ -1,4 +1,6 @@
 import logging
+from datetime import datetime
+
 from PyQt5.QtWidgets import (
     QLabel,
     QFrame,
@@ -106,13 +108,31 @@ class Repository(QFrame):
     def __delete_self(self):
         self.__parent.delete_repository(self)
 
-    def create_task(self, name_task: str = "Tâche"):  #
+    def create_task(
+            self,
+            name_task: str = 'Tache',
+            is_done: bool = False,
+            priority: str = "Aucune",
+            assignee: str = None,
+            due_date: datetime = None
+        ):  #
         """
         create a task with the file task.py
         :param name_task:
+        :param is_done:
+        :param priority:
+        :param assignee:
+        :param due_date:
         :return:
         """
-        created_task = ts.Task(self, name_task)
+        created_task = ts.Task(
+            self,
+            name_task=name_task,
+            is_done=is_done,
+            priority=priority,
+            assignee=assignee,
+            due_date=due_date
+        )
         self.__task_list.append(created_task)  # create the object in the list
         self.__layout.addWidget(created_task)
 

@@ -4,3 +4,4 @@ channels:
 dependencies:
   - python=3.11
   - pyqt=5.15.10
+  - requests=2.31.0

@@ -1,5 +1,7 @@
 import logging
 import sys
+import requests
+import json
 
 from PyQt5.QtWidgets import (
     QApplication,
@@ -21,6 +23,8 @@ if DEBUG:
     logging.basicConfig(level=logging.DEBUG)
 else:
     logging.basicConfig(level=logging.WARNING)
+
+API = "http://192.168.122.199:8000"
 
 
 class MainWindow(QMainWindow):
@@ -75,8 +79,18 @@ class Listify(QWidget):
         self.tabWidget.tabCloseRequested.connect(self.__closeTab)
 
         self.__projects = []
-        self.new_project("test1")
-        self.new_project("tEsT2")
+
+        try:
+            api_list_of_project = json.loads(requests.get(f"{API}/get/all_projects").text)
+            for project in api_list_of_project:
+                proj_dict = json.loads(requests.get(f"{API}/get/project/{project['project_id']}").text)
+                self.append_new_project(proj_dict["name"])
+                # create all the children objects from the json given by the server
+                self.__projects[-1].repos_from_dicts(proj_dict["repositories"])
+                # set the local id to the remote id, important for upload later on
+                self.__projects[-1].id = project["project_id"]
+        except Exception as e:
+            logging.error(e)
 
         # we need to load/create projects before loading the sidebar
         self.sidebarWidget = ui_objects.Sidebar(parent=self)
@@ -141,12 +155,29 @@ class Listify(QWidget):
 
     def new_project(self, name):
         """
+        Create a new project, instantly uploading it to the server
+        """
+        self.append_new_project(name)
+        new_project = self.__projects[-1]
+
+        try:
+            create_proj_endpoint = requests.post(f"{API}/upload/project", json=new_project.to_dict()).text
+            logging.debug(f"create_proj_endpoint response: {create_proj_endpoint}")
+
+            # we can get the remote projecèt id from the server
+            create_proj_endpoint = json.loads(create_proj_endpoint)
+            self.__projects[-1].id = create_proj_endpoint["project_id"]
+        except Exception as e:
+            logging.error(f"error creating project on the backend: {e}")
+
+    def append_new_project(self, name):
+        """
         Create a new project
         """
-        new_project = ui_objects.Project(name_project=name)
+        new_project = ui_objects.Project(self, name_project=name)
         self.__projects.append(new_project)
         self.__openTab(self.__projects[-1])
-        logging.info(f"new project created: {name}")
+        logging.info(f"new project created from api: {name}")
         logging.debug(f"projects: {self.__projects}")
 
     def delete_project_by_index(self, index: int):
@@ -154,8 +185,26 @@ class Listify(QWidget):
             if self.__projects[index] in self.opened_projects:
                 self.tabWidget.removeTab(self.opened_projects.index(self.__projects[index]))
 
+            proj_id = self.__projects[index].id
+            # if id is not 0 it should be on the server
+            if proj_id != 0:
+                try:
+                    endpoint = json.loads(requests.delete(f"{API}/delete/project/{proj_id}").text)
+                    logging.info(f"{endpoint['element_type']} {endpoint['element_id']} {endpoint['message']}")
+                except Exception as e:
+                    logging.error(f"Error while deleting the project from the backend: {e}")
             self.__projects.pop(index)
             logging.debug(f"deleted project index {index}")
+
+    def update_project_api(self, project: ui_objects.Project):
+        if project.id != 0:
+            try:
+                endpoint = requests.post(f"{API}/update/project/{project.id}", json=project.to_dict())
+                logging.info(f"updated project, response from api: {endpoint.text}")
+            except Exception as e:
+                logging.error(f"Error while updating project: {e}")
+        else:
+            logging.error(f"error while updating project, project has no ID !")
 
     def goto_last_tab(self):
         """
