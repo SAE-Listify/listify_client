@@ -2,6 +2,7 @@ import logging
 import sys
 import requests
 import json
+import tomllib
 
 from PyQt5.QtWidgets import (
     QApplication,
@@ -17,14 +18,18 @@ from PyQt5.QtGui import QCloseEvent
 
 import ui_objects
 
-DEBUG = True
+with open("config.toml", "rb") as f:
+    config = tomllib.load(f)
+
+DEBUG = config['debug']
 
 if DEBUG:
     logging.basicConfig(level=logging.DEBUG)
 else:
     logging.basicConfig(level=logging.WARNING)
 
-API = "http://192.168.122.199:8000"
+logging.debug(f"loaded config: {config}")
+API = f"http://{config['api_addr']}:{config['api_port']}"
 
 
 class MainWindow(QMainWindow):
